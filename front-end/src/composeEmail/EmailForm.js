@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import "../style/EmailForm.css"
+import axios from 'axios'; // Import Axios
+import { EmailBuilder } from './NewEmail'; // Import the EmailBuilder class
+import "../style/EmailForm.css";
 
 const EmailForm = () => {
   const [formData, setFormData] = useState({
+    fromAddress: '',
     subject: '',
     receiverEmail: '',
     body: '',
@@ -26,10 +29,57 @@ const EmailForm = () => {
     }));
   };
 
+  // Function to send email to backend
+  const sendEmailToBackend = async (emailData) => {
+    try {
+      console.log(emailData);
+      const response = await axios.post('http://localhost:8080/sendEmail', emailData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("Email sent successfully!");
+      } else {
+        console.error("Error sending email");
+      }
+    } catch (error) {
+      console.error("Error during email sending:", error);
+      alert('Something went wrong. Please try again later.');
+    }
+  };
+
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Process the form submission
-    console.log(formData);
+
+    // Build the email using the EmailBuilder
+    const emailBuilder = new EmailBuilder();
+
+    // Add all email properties
+    const email = emailBuilder
+      .setFromAddress('your-email@example.com')  // You can customize the sender's address as needed
+      .setToAddress(formData.receiverEmail)
+      .setSubject(formData.subject)
+      .setBody(formData.body);
+
+    // Add attachments to the email
+    formData.attachments.forEach((attachment) => {
+      emailBuilder.addAttachment(attachment);
+    });
+
+    // Send the email as JSON to the backend
+    const emailObject = emailBuilder.build();
+    sendEmailToBackend(emailObject);
+
+    // Reset the form after submission (including the attachments array)
+    setFormData({
+      subject: '',
+      receiverEmail: '',
+      body: '',
+      attachments: [],  // Reset the attachments array
+    });
   };
 
   return (
@@ -47,7 +97,6 @@ const EmailForm = () => {
           required
         />
       </div>
-
       <div className="form-group">
         <label htmlFor="subject">Subject</label>
         <input
@@ -92,9 +141,9 @@ const EmailForm = () => {
           </ul>
         )}
       </div>
-
       <button type="submit" className="submit-btn">Send Email</button>
     </form>
+   
   );
 };
 

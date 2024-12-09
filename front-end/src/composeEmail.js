@@ -8,7 +8,6 @@ function ComposeEmail() {
      <div>
         <NavBar></NavBar>
         <div className="container_composeEmail">
-        
         <SideBar></SideBar>
         <EmailForm></EmailForm>
         </div>
