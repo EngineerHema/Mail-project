@@ -83,3 +83,19 @@ select {
   margin-top: 5px;
   word-wrap: break-word;
 }
+
+.add-recipient-btn {
+  display: inline-block;
+  padding: 5px 10px; /* Smaller padding for compactness */
+  font-size: 14px; /* Smaller font size */
+  background-color: green; /* Standard blue button color */
+  color: #fff; /* White text */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Slightly rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.add-recipient-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}

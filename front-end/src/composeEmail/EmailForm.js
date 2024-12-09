@@ -8,8 +8,9 @@ const EmailForm = () => {
     fromAddress: '',
     subject: '',
     receiverEmail: '',
+    toAddress: [],
     body: '',
-    attachments: [], // Array to hold multiple file names
+    attachments: [], // Array to hold file objects with content and metadata
   });
 
   const handleChange = (e) => {
@@ -20,16 +21,41 @@ const EmailForm = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to array
-    const fileNames = files.map(file => file.name); // Extract file names
-    setFormData((prevData) => ({
-      ...prevData,
-      attachments: [...prevData.attachments, ...fileNames], // Add new file names to the array
-    }));
+  const handleAddRecipient = () => {
+    if (formData.receiverEmail.trim() !== '') {
+      setFormData((prevData) => ({
+        ...prevData,
+        toAddress: [...prevData.toAddress, formData.receiverEmail.trim()],
+        receiverEmail: '', // Clear the input box
+      }));
+    }
   };
 
-  // Function to send email to backend
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files); // Convert FileList to array
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const fileContent = event.target.result; // Base64 encoded content
+
+        // Create a file object with metadata and encoded content
+        const fileObject = {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          content: fileContent, // Base64 encoded content
+        };
+
+        // Append this file object to the attachments list
+        setFormData((prevData) => ({
+          ...prevData,
+          attachments: [...prevData.attachments, fileObject],
+        }));
+      };
+      reader.readAsDataURL(file); // Read file as a data URL (Base64)
+    });
+  };
+
   const sendEmailToBackend = async (emailData) => {
     try {
       console.log(emailData);
@@ -50,35 +76,34 @@ const EmailForm = () => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Build the email using the EmailBuilder
     const emailBuilder = new EmailBuilder();
-
-    // Add all email properties
     const email = emailBuilder
-      .setFromAddress('your-email@example.com')  // You can customize the sender's address as needed
-      .setToAddress(formData.receiverEmail)
+      .setFromAddress('your-email@example.com') // Sender's email
       .setSubject(formData.subject)
       .setBody(formData.body);
 
-    // Add attachments to the email
-    formData.attachments.forEach((attachment) => {
-      emailBuilder.addAttachment(attachment);
-    });
+    // Add all recipients
+    formData.toAddress.forEach((address) => emailBuilder.addToAddress(address));
 
-    // Send the email as JSON to the backend
+    // Add encoded attachments
+    formData.attachments.forEach((attachment) =>
+      emailBuilder.addAttachment(attachment)
+    );
+
     const emailObject = emailBuilder.build();
     sendEmailToBackend(emailObject);
 
-    // Reset the form after submission (including the attachments array)
+    // Reset the form
     setFormData({
+      fromAddress: '',
       subject: '',
       receiverEmail: '',
+      toAddress: [],
       body: '',
-      attachments: [],  // Reset the attachments array
+      attachments: [],
     });
   };
 
@@ -93,9 +118,18 @@ const EmailForm = () => {
           name="receiverEmail"
           value={formData.receiverEmail}
           onChange={handleChange}
-          placeholder="Enter receiver's email"
-          required
+          placeholder="Enter recipient's email"
         />
+        <button type="button" onClick={handleAddRecipient} className="add-recipient-btn">
+          Add Recipient
+        </button>
+        {formData.toAddress.length > 0 && (
+          <ul className="recipient-list">
+            {formData.toAddress.map((email, index) => (
+              <li key={index}>{email}</li>
+            ))}
+          </ul>
+        )}
       </div>
       <div className="form-group">
         <label htmlFor="subject">Subject</label>
@@ -109,7 +143,6 @@ const EmailForm = () => {
           required
         />
       </div>
-
       <div className="form-group">
         <label htmlFor="body">Email Body</label>
         <textarea
@@ -122,7 +155,6 @@ const EmailForm = () => {
           required
         />
       </div>
-
       <div className="form-group">
         <label htmlFor="attachments">Attachments</label>
         <input
@@ -131,19 +163,20 @@ const EmailForm = () => {
           name="attachments"
           onChange={handleFileChange}
           accept="*/*"
-          multiple // Allow multiple file selections
+          multiple
         />
         {formData.attachments.length > 0 && (
           <ul className="attachment-list">
             {formData.attachments.map((attachment, index) => (
-              <li key={index}>{attachment}</li>
+              <li key={index}>{attachment.name}</li>
             ))}
           </ul>
         )}
       </div>
-      <button type="submit" className="submit-btn">Send Email</button>
+      <button type="submit" className="submit-btn">
+        Send Email
+      </button>
     </form>
-   
   );
 };
 
