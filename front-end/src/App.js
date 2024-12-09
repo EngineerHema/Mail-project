@@ -1,8 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginForm from './formSignIn';
 import SignUpForm from './formSignUp';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import Inbox from './inbox';
+import ComposeEmail from './composeEmail';
+import Trash from './trash';
+import Contacts from './contacts';
+import Sent from './sent';
+
+
 
 function App() {
 
@@ -11,14 +18,26 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Redirect from root path to /signIn */}
-        <Route path="/" element={<Navigate to="/signIn" />} />
+       
+        <Route path="/" element={<Navigate to="/signIn" />} />   
         
-        {/* Sign In page */}
         <Route path="/signIn" element={<LoginForm setAPI_KEY = {setAPI_KEY}/>} />
-        
-        {/* Sign Up page */}
+             
         <Route path="/register" element={<SignUpForm />} />
+
+        <Route path="/myInbox" element={<Inbox/>} />
+        
+        <Route path="/myComposeEmail" element={<ComposeEmail/>} />
+
+        <Route path="/mySent" element={<Sent/>} />
+
+        <Route path="/myTrash" element={<Trash/>} />
+
+        <Route path="/myContacts" element={<Contacts/>} />
+
+
+       
+
       </Routes>
     </Router>
   );

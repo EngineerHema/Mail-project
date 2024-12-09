@@ -3,36 +3,59 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom'; // Use useNavigate here
 import axios from 'axios'; // Import Axios
-import './formSignin.css';
+import "./style/formSignin.css";
 
-function LoginForm({setAPI_KEY}) {
+
+function LoginForm({ setAPI_KEY }) {
   // State for form fields
   setAPI_KEY(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState(false); // State for email error
+  const [passwordError, setPasswordError] = useState(false); // State for password error
   const navigate = useNavigate(); // Replacing useHistory with useNavigate
 
   // Handle email input change
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
+    setEmailError(false); // Reset error state on change
   };
 
   // Handle password input change
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+    setPasswordError(false); // Reset error state on change
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
+
+    // Check if fields are empty
+    let isValid = true;
+    if (!email.trim()) {
+      setEmailError(true);
+      isValid = false;
+    }
+    if (password.length<8) {
+      setPasswordError(true);
+      isValid = false;
+    }
     
+
+    if (!isValid) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+
     const loginData = {
       emailAddress: email,
       password: password,
     };
 
     try {
-      console.log(loginData)
+      console.log(loginData);
+      navigate('/myInbox'); 
       const response = await axios.post('http://localhost:8080/signIn', loginData, {
         headers: {
           'Content-Type': 'application/json',
@@ -44,9 +67,8 @@ function LoginForm({setAPI_KEY}) {
         alert(response.data.message);
         console.log(response.data);
         setAPI_KEY(response.data.apiKey);
-        
 
-        navigate('/dashboard');  // Replace with the desired route
+      //  navigate('/myprofile'); // Replace with the desired route /// hemaaa fok el coment lma t4t8l
       } else {
         // Handle error (e.g., invalid credentials)
         alert('Login failed. Please check your credentials.');
@@ -58,34 +80,38 @@ function LoginForm({setAPI_KEY}) {
   };
 
   return (
-    <div className='all'>
-      <div className='form_section_in'>
+    <div className="all">
+      <div className="form_section_in">
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control 
-              type="email" 
-              placeholder="Enter email" 
+            <Form.Label  className='lable'>Email address</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
               value={email}
               onChange={handleEmailChange} // Update state on change
+              className={emailError ? 'error' : ''} // Add 'error' class if emailError is true
             />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control 
-              type="password" 
-              placeholder="Password" 
+            <Form.Label className='lable'>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Password"
               value={password}
               onChange={handlePasswordChange} // Update state on change
+              className={passwordError ? 'error' : ''} // Add 'error' class if passwordError is true
             />
           </Form.Group>
 
           <Form.Group>
-            <Link to="/register" className='dont_have'>Do not have an account?</Link>
+            <Link to="/register" className="dont_have">
+              Do not have an account?
+            </Link>
           </Form.Group>
 
-          <Button variant="primary" type="submit" className='button-submit'>
+          <Button variant="primary" type="submit" className="button-submit">
             Submit
           </Button>
         </Form>

@@ -1,0 +1,5 @@
+.container_composeEmail{
+    display: flex;
+    justify-content: space-between; /* Adjust spacing between the elements */
+    align-items: stretch; /* Ensure elements align evenly vertically */
+}
