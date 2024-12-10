@@ -1,11 +1,8 @@
 package com.example.mail.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -30,7 +27,8 @@ public class User {
     @Column(name = "password")  // Custom column name
     private String password;
 
-    @OneToMany(mappedBy = "user")  // "user" is the field in the Email class
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Email> emails;
 
     // Getters and Setters
@@ -72,6 +70,12 @@ public class User {
 
     public void setEmails(List<Email> emails) {
         this.emails = emails;
+    }
+
+
+    public void addEmail(Email email) {
+        email.setUser(this);
+        emails.add(email);
     }
 
     public String getPassword() {

@@ -1,13 +1,10 @@
 package com.example.mail.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime; // for time_stamp if it's a date-time value
+import java.util.List;
 
 @Entity
 public class Email {
@@ -33,13 +30,14 @@ public class Email {
     private String body;
 
     @Column(name = "attachments")  // Custom column name
-    private String attachments;
+    private List<byte[]> attachments;
 
     @Column(name = "type")  // Custom column name
     private String type;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")  // Foreign key to User entity
+    @JsonBackReference
     private User user;
 
     // Getters and Setters
@@ -91,11 +89,11 @@ public class Email {
         this.body = body;
     }
 
-    public String getAttachments() {
+    public List<byte[]> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(String attachments) {
+    public void setAttachments(List<byte[]> attachments) {
         this.attachments = attachments;
     }
 

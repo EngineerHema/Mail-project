@@ -40,6 +40,8 @@ public class AuthController {
             Map<String, String> response = new HashMap<>();
             response.put("message", "Login successful");
             response.put("apiKey", apiKey);
+            response.put("name", newUser.get().getFirstName());
+
 
             return ResponseEntity.ok(response);  // Return the map as a JSON response
         }
