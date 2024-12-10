@@ -1,0 +1,26 @@
+.scrollable-container {
+    width: 100%;
+    width: 1100px;
+    margin-right: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    border: 5px;
+    border-color: black
+  }
+  
+  .scrollable-item {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #e6e6e6;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+
+.scrollable_flex {
+    display: flex;
+    justify-content: space-between; /* Adjust spacing between the elements */
+    align-items: stretch; /* Ensure elements align evenly vertically */
+}

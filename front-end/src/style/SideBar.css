@@ -1,6 +1,8 @@
 .SideBarAll {
     width: 200px; /* Increased width for better usability */
-    height: 100vh; /* Full height */
+    height: 100%; /* Full height */
+    height: 120vh; /* Full height */
+
     background-color: #343a40; /* Dark Bootstrap color */
     color: white;
     display: flex;
@@ -27,11 +29,11 @@
   
   .nav-item:hover {
     background-color: #495057; /* Slightly lighter gray */
-    color: #ffc107; /* Gold hover color */
+    color: #007bff; /* Gold hover color */
   }
   
   .nav-item.active {
-    background-image: linear-gradient(to bottom, rgb(0, 255, 255), rgb(255, 255, 255));/* Gold active link */
+    background-image: linear-gradient(to bottom, #ffffff, rgb(247, 247, 247));/* Gold active link */
     color: #343a40; /* Dark text for contrast */
    
   }
