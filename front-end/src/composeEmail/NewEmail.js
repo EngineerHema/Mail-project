@@ -12,8 +12,8 @@ export class Email {
 
 export class EmailBuilder {
   constructor() {
-    this.fromAddress = ''; // Assuming the "from" address is hardcoded or can be passed separately
-    this.toAddress = []; // Array of strings for multiple recipients
+    this.fromAddress = ''; 
+    this.toAddress = []; 
     this.subject = '';
     this.body = '';
     this.attachments = [];

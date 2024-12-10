@@ -1,7 +1,7 @@
 .SideBarAll {
     width: 200px; /* Increased width for better usability */
-    height: 100%; /* Full height */
-    height: 120vh; /* Full height */
+    height: calc(100vh - 70px); 
+   
 
     background-color: #343a40; /* Dark Bootstrap color */
     color: white;
