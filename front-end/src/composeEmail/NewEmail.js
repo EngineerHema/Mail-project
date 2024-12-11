@@ -1,22 +1,22 @@
-// EmailBuilder.js
-
 export class Email {
-  constructor(fromAddress, toAddress, subject, body, attachments) {
+  constructor(fromAddress, toAddress, subject, body, attachments, priority) {
     this.fromAddress = fromAddress;
     this.toAddress = toAddress; // Array of strings
     this.subject = subject;
     this.body = body;
     this.attachments = attachments;
+    this.priority = priority; // Priority level (e.g., 'high', 'medium', 'low')
   }
 }
 
 export class EmailBuilder {
   constructor() {
-    this.fromAddress = ''; 
-    this.toAddress = []; 
+    this.fromAddress = '';
+    this.toAddress = [];
     this.subject = '';
     this.body = '';
     this.attachments = [];
+    this.priority = 'medium'; // Default priority
   }
 
   setFromAddress(fromAddress) {
@@ -46,13 +46,19 @@ export class EmailBuilder {
     return this;
   }
 
+  setPriority(priority) {
+    this.priority = priority;
+    return this;
+  }
+
   build() {
     return new Email(
       this.fromAddress,
       this.toAddress,
       this.subject,
       this.body,
-      this.attachments
+      this.attachments,
+      this.priority // Include priority in the built email
     );
   }
 }

@@ -1,8 +1,39 @@
 
-.Card{
+.card-container{
     box-sizing: border-box; 
-    white-space: nowrap; 
     overflow:hidden;    
     text-overflow: ellipsis; 
 
+}
+
+
+.card-header {
+    display: flex;
+    justify-content: space-between; /* Pushes items to the ends */
+    align-items: center; /* Centers items vertically */
+    padding: 10px;
+  }
+
+.no-underline {
+    text-decoration: none;
+    color: blue; /* Optional: Set the color of the link */
+}
+
+.no-underline:hover {
+    text-decoration: underline; /* Optional: Add underline on hover if desired */
+}
+
+.delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: darkred;
 }

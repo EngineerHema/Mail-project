@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import Axios
-import { EmailBuilder } from './NewEmail'; // Import the EmailBuilder class
+import axios from 'axios';
+import { EmailBuilder } from './NewEmail';
 import "../style/EmailForm.css";
 
 const EmailForm = () => {
@@ -10,7 +10,8 @@ const EmailForm = () => {
     receiverEmail: '',
     toAddress: [],
     body: '',
-    attachments: [], // Array to hold file objects with content and metadata
+    attachments: [],
+    priority: 'medium',
   });
 
   const handleChange = (e) => {
@@ -21,39 +22,51 @@ const EmailForm = () => {
     }));
   };
 
+  const handlePriorityChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      priority: e.target.value,
+    }));
+  };
+
   const handleAddRecipient = () => {
     if (formData.receiverEmail.trim() !== '') {
       setFormData((prevData) => ({
         ...prevData,
         toAddress: [...prevData.toAddress, formData.receiverEmail.trim()],
-        receiverEmail: '', // Clear the input box
+        receiverEmail: '',
       }));
     }
   };
 
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to array
+    const files = Array.from(e.target.files);
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (event) => {
-        const fileContent = event.target.result; // Base64 encoded content
+        const fileContent = event.target.result;
 
-        // Create a file object with metadata and encoded content
         const fileObject = {
           name: file.name,
           type: file.type,
           size: file.size,
-          content: fileContent, // Base64 encoded content
+          content: fileContent,
         };
 
-        // Append this file object to the attachments list
         setFormData((prevData) => ({
           ...prevData,
           attachments: [...prevData.attachments, fileObject],
         }));
       };
-      reader.readAsDataURL(file); // Read file as a data URL (Base64)
+      reader.readAsDataURL(file);
     });
+  };
+
+  const handleDeleteAttachment = (index) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      attachments: prevData.attachments.filter((_, i) => i !== index),
+    }));
   };
 
   const sendEmailToBackend = async (emailData) => {
@@ -81,22 +94,21 @@ const EmailForm = () => {
 
     const emailBuilder = new EmailBuilder();
     const email = emailBuilder
-      .setFromAddress('your-email@example.com') // Sender's email
+      .setFromAddress('your-email@example.com')
       .setSubject(formData.subject)
       .setBody(formData.body);
 
-    // Add all recipients
     formData.toAddress.forEach((address) => emailBuilder.addToAddress(address));
 
-    // Add encoded attachments
     formData.attachments.forEach((attachment) =>
       emailBuilder.addAttachment(attachment)
     );
 
+    emailBuilder.setPriority(formData.priority);
+
     const emailObject = emailBuilder.build();
     sendEmailToBackend(emailObject);
 
-    // Reset the form
     setFormData({
       fromAddress: '',
       subject: '',
@@ -104,6 +116,7 @@ const EmailForm = () => {
       toAddress: [],
       body: '',
       attachments: [],
+      priority: 'medium',
     });
   };
 
@@ -156,6 +169,20 @@ const EmailForm = () => {
         />
       </div>
       <div className="form-group">
+        <label htmlFor="priority">Email Priority</label>
+        <select
+          id="priority"
+          name="priority"
+          value={formData.priority}
+          onChange={handlePriorityChange}
+          className={`priority-dropdown ${formData.priority}`}
+        >
+          <option value="high" className="high-priority">High</option>
+          <option value="medium" className="medium-priority">Medium</option>
+          <option value="low" className="low-priority">Low</option>
+        </select>
+      </div>
+      <div className="form-group">
         <label htmlFor="attachments">Attachments</label>
         <input
           type="file"
@@ -168,7 +195,16 @@ const EmailForm = () => {
         {formData.attachments.length > 0 && (
           <ul className="attachment-list">
             {formData.attachments.map((attachment, index) => (
-              <li key={index}>{attachment.name}</li>
+              <li key={index}>
+                {attachment.name} 
+                <button
+                  type="button"
+                  onClick={() => handleDeleteAttachment(index)}
+                  className="delete-attachment-btn"
+                >
+                  Delete
+                </button>
+              </li>
             ))}
           </ul>
         )}

@@ -1,20 +1,16 @@
 .scrollable-container {
     height: calc(100vh - 70px); 
-    width: 1285px;
     overflow-y: auto;
-    margin-right: 20px;
-    padding: 30px;
-    background-color: #f5acac;
-    border-radius: 8px;
+    
+    padding: 20px;
+    background-color: #8a8a8a;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
-    border: 5px;
-    border-color: black
     
   }
   
   .scrollable-item {
-    width: 1200px;
+    width: 1100px;
     height: 155px;
     padding: 10px;
     margin-bottom: 10px;

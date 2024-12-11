@@ -8,12 +8,12 @@ const ScrollableContainer = () => {
   // Using useEffect to populate items when the component mounts
   useEffect(() => {
     const newItems = [];
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < 5; index++) {
       const newItem = {
         id: items.length + 1, // This needs to be adjusted if the state is updated asynchronously
-        sender: `kero samy`,
-        header: `kero`,
-        body: `kero kero`,
+        sender: `karkjjjjjoooor`,
+        header: `الزنا علي أصوله`,
+        body: `ما تيجي و نجيب حمادة صغنن`,
         color: index % 2 === 0 ? 'primary' : 'success', // Use index for color assignment
       };
       newItems.push(newItem);
@@ -27,14 +27,12 @@ const ScrollableContainer = () => {
     <div>
       <div className="scrollable-container">
         {items.map((item) => (
-          <div key={item.id} className="scrollable-item">
-            <Email
+            <Email  key={item.id} className="scrollable-item"
               sender={item.sender}
               header={item.header}
               body={item.body}
               color={item.color}
             />
-          </div>
         ))}
       </div>
     </div>
