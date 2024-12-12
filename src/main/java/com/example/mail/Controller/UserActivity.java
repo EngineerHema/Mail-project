@@ -63,26 +63,27 @@ public class UserActivity {
             }
     }
 
-    // Retrieve Emails Endpoint
     @GetMapping("/getEmail")
-    public ResponseEntity<List<Email>> getEmails(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, String> requestBody) throws ExecutionException, InterruptedException {
-        String Address = requestBody.get("Address");
-        String type = requestBody.get("type");
+    public ResponseEntity<List<Email>> getEmails(
+            @RequestHeader("Authorization") String authorization,
+            @RequestParam("Address") String address,
+            @RequestParam(value = "type", required = false) String type) throws ExecutionException, InterruptedException {
 
         String apiKey = extractApiKey(authorization);
         System.out.println("Key: " + apiKey);
 
-        if (apiKey == null || Address == null) {
+        if (apiKey == null || address == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        if (apiKeyManager.validateApiKey(Address, apiKey)) {
-            List<Email> emails = emailService.returnEmails(Address, type);
+        if (apiKeyManager.validateApiKey(address, apiKey)) {
+            List<Email> emails = emailService.returnEmails(address, type);
             return ResponseEntity.ok(emails);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }
+
 
     // Extract API Key from Authorization Header
     private String extractApiKey(String authorization) {

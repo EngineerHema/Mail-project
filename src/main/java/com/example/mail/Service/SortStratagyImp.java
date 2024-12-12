@@ -1,7 +1,9 @@
 package com.example.mail.Service;
 
 import com.example.mail.model.Email;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SortStratagyImp implements SortStratagy {
 
     private SortTimeNewToOld sortTimeNewToOld ;
