@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,24 +25,41 @@ public class UserActivity {
 
     // Send Email Endpoint
     @PostMapping("/sendEmail")
-    public ResponseEntity<String> sendEmail(@RequestHeader("Authorization") String authorization, @RequestBody Email email) throws ExecutionException, InterruptedException {
+    public ResponseEntity<String> sendEmail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String,Object> requestBody) throws ExecutionException, InterruptedException {
         String apiKey = extractApiKey(authorization);
         System.out.println("Key: " + apiKey);
+        Email email = new Email();
+        List<String> toAddresses = (List<String>) requestBody.get("toAddress");
+        boolean sent = false;
 
-        if (apiKey == null || email.getFromAddress() == null) {
+
+        if (apiKey == null || requestBody.get("fromAddress").toString() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or sender email.");
         }
+        if (!apiKeyManager.validateApiKey(requestBody.get("fromAddress").toString(), apiKey)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+        }
 
-        if (apiKeyManager.validateApiKey(email.getFromAddress(), apiKey)) {
-            boolean sent = emailService.sendEmail(email);
+        email.setFromAddress(requestBody.get("fromAddress").toString());
+        email.setAttachments((List<byte[]>) requestBody.get("attachments"));
+        email.setBody(requestBody.get("body").toString());
+        email.setPriority(requestBody.get("priority").toString());
+        email.setSubject(requestBody.get("subject").toString());
+
+
+        for (String toAddress : toAddresses) {
+            email.setToAddress(toAddress);
+
+            if (apiKeyManager.validateApiKey(email.getFromAddress(), apiKey)) {
+                sent = emailService.sendEmail(email);
+
+            }
+        }
             if (sent) {
                 return ResponseEntity.ok("Email sent successfully!");
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User validation failed.");
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
-        }
     }
 
     // Retrieve Emails Endpoint

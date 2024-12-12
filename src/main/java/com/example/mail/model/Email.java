@@ -26,6 +26,17 @@ public class Email {
     @Column(name = "to_address")  // Custom column name
     private String toAddress;  // renamed to match Java convention
 
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    @Column(name = "priority")  // Custom column name
+    private String priority;  // renamed to match Java convention
+
     @Column(name = "body")  // Custom column name
     private String body;
 
