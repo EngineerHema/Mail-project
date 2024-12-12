@@ -1,9 +1,11 @@
 import SideBar from "./Bars/SideBar";
 import NavBar from "./Bars/NavBar";
-function Trash() {
+
+function Trash({ API_KEY, emailAddress, name }) {
     return (
      <div>
-        <NavBar></NavBar>
+        <NavBar name={name}></NavBar>
+
         <SideBar></SideBar>
      </div>
     );

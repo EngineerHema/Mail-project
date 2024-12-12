@@ -6,9 +6,9 @@ import axios from 'axios'; // Import Axios
 import "./style/formSignin.css";
 
 
-function LoginForm({ setAPI_KEY }) {
+function LoginForm({ API_KEY, emailAddress ,setName}) {
+
   // State for form fields
-  setAPI_KEY(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false); // State for email error
@@ -55,7 +55,6 @@ function LoginForm({ setAPI_KEY }) {
 
     try {
       console.log(loginData);
-      navigate('/myInbox'); 
       const response = await axios.post('http://localhost:8080/signIn', loginData, {
         headers: {
           'Content-Type': 'application/json',
@@ -64,9 +63,14 @@ function LoginForm({ setAPI_KEY }) {
 
       if (response.status === 200) {
         // On successful login, redirect to another page, e.g., dashboard or home
+        emailAddress.current = email
+        navigate('/myInbox'); 
         alert(response.data.message);
-        console.log(response.data);
-        setAPI_KEY(response.data.apiKey);
+        console.log(response.data.apiKey);
+        API_KEY.current = response.data.apiKey;
+        console.log(API_KEY.current + "current");
+        setName(response.data.name);
+
 
       //  navigate('/myprofile'); // Replace with the desired route /// hemaaa fok el coment lma t4t8l
       } else {

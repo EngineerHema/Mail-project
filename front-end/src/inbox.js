@@ -3,11 +3,11 @@ import NavBar from "./Bars/NavBar";
 import ScrollableContainer from "./emails/ScrollableContainer";
 
 
-function Inbox() {
+
+function Inbox({ API_KEY, emailAddress, name }) {
     return (
      <div>
-      
-        <NavBar></NavBar>
+        <NavBar name={name}></NavBar>
         <div className="scrollable_flex">
         <SideBar></SideBar>
         <ScrollableContainer/>

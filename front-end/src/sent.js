@@ -1,9 +1,10 @@
 import SideBar from "./Bars/SideBar";
 import NavBar from "./Bars/NavBar";
-function Sent() {
+import React, { useState } from 'react';
+function Sent({ API_KEY, emailAddress, name }) {
     return (
      <div>
-        <NavBar></NavBar>
+        <NavBar name={name}></NavBar>
         <SideBar></SideBar>
      </div>
     );
