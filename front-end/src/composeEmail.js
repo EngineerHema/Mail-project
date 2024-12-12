@@ -6,9 +6,12 @@ import "./style/composeEmail.css"
 function ComposeEmail({ API_KEY, emailAddress, name}) {
     return (
      <div>
+        
+       
         <NavBar name={name}></NavBar>
         <div className="container_composeEmail">
-        <SideBar></SideBar>
+        <SideBar/>
+
         <EmailForm API_KEY={API_KEY} emailAddress={emailAddress} ></EmailForm>
 
         </div>

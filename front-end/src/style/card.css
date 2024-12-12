@@ -1,8 +1,9 @@
 
 .card-container{
-    box-sizing: border-box; 
     overflow:hidden;    
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
+    width: 100%; 
+
 
 }
 

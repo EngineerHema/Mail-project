@@ -7,9 +7,9 @@ import ScrollableContainer from "./emails/ScrollableContainer";
 function Inbox({ API_KEY, emailAddress, name }) {
     return (
      <div>
-        <NavBar name={name}></NavBar>
+        <NavBar name={name}/>
         <div className="scrollable_flex">
-        <SideBar></SideBar>
+        <SideBar/>
         <ScrollableContainer/>
       </div>
      </div>
