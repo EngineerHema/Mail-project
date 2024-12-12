@@ -7,6 +7,7 @@ import "./style/formSignin.css";
 
 
 function LoginForm({ API_KEY, emailAddress ,setName}) {
+
   // State for form fields
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -69,6 +70,7 @@ function LoginForm({ API_KEY, emailAddress ,setName}) {
         API_KEY.current = response.data.apiKey;
         console.log(API_KEY.current + "current");
         setName(response.data.name);
+
 
       //  navigate('/myprofile'); // Replace with the desired route /// hemaaa fok el coment lma t4t8l
       } else {

@@ -26,6 +26,7 @@ function App() {
        
         <Route path="/" element={<Navigate to="/signIn" />} />   
         
+
         <Route path="/signIn" element={<LoginForm API_KEY = {API_KEY} emailAddress={emailAddress} setName={setName}/>} />
              
         <Route path="/register" element={<SignUpForm/>} />
@@ -39,6 +40,7 @@ function App() {
         <Route path="/myTrash" element={<Trash API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
 
         <Route path="/myContacts" element={<Contacts API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+
 
 
        

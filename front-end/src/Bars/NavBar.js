@@ -2,8 +2,10 @@ import Navbar from 'react-bootstrap/Navbar';
 import React, { useState } from 'react';
 import "../style/NavBar.css";
 
+
 function NavBar({name}) {
   console.log(name+" name")
+
 
 
   // Refresh button action
@@ -15,6 +17,7 @@ function NavBar({name}) {
     <Navbar className="NavBar d-flex">
       <Navbar.Text className="NavBarText">
         Signed in as: <span>{name}</span>
+
       </Navbar.Text>
       <button 
         className="NavBarButton btn btn-outline-light" 

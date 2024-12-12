@@ -3,7 +3,10 @@ import axios from 'axios';
 import { EmailBuilder } from './NewEmail';
 import "../style/EmailForm.css";
 
+
 const EmailForm = ({API_KEY, emailAddress}) => {
+
+
   const [formData, setFormData] = useState({
     fromAddress: '',
     subject: '',
@@ -71,12 +74,16 @@ const EmailForm = ({API_KEY, emailAddress}) => {
 
   const sendEmailToBackend = async (emailData) => {
     try {
+
       console.log("key"+API_KEY.current)
+
       console.log(emailData);
       const response = await axios.post('http://localhost:8080/sendEmail', emailData, {
         headers: {
           'Content-Type': 'application/json',
+
           Authorization:`Bearer ${API_KEY.current}`
+
         },
       });
 
@@ -96,7 +103,9 @@ const EmailForm = ({API_KEY, emailAddress}) => {
 
     const emailBuilder = new EmailBuilder();
     const email = emailBuilder
+
       .setFromAddress(emailAddress.current)
+
       .setSubject(formData.subject)
       .setBody(formData.body);
 
@@ -218,4 +227,6 @@ const EmailForm = ({API_KEY, emailAddress}) => {
   );
 };
 
+
 export default EmailForm;
+
