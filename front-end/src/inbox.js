@@ -10,7 +10,7 @@ function Inbox({ API_KEY, emailAddress, name }) {
         <NavBar name={name}/>
         <div className="scrollable_flex">
         <SideBar/>
-        <ScrollableContainer/>
+        <ScrollableContainer API_KEY={API_KEY} Address={emailAddress} type={"inbox"}/>
       </div>
      </div>
     );
