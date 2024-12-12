@@ -1,0 +1,41 @@
+.all {
+  background-image: url('email.jpg');
+  background-size: cover;          
+  background-position: center;      
+  background-repeat: no-repeat;     
+  height: 100vh;  
+  padding-top: 1px;              
+}
+
+.form_section_in {
+  background-image: linear-gradient(to bottom, rgb(0, 255, 255), rgb(4, 4, 247));
+  font-weight: bold;
+  padding: 30px;             
+  border-radius: 10px;      
+  box-shadow: 5px 5px 20px rgb(0, 0, 0) ; 
+  max-width: 400px;           
+  margin: 0 auto;
+  margin-top: 13%;          
+}
+.lable {
+  color: black;
+}
+
+.dont_have {
+  color: rgb(0, 0, 0);
+}
+.button-submit {
+  color: rgb(0, 0, 0) !important;
+  background-color: rgb(1, 255, 247) !important;
+  margin-left: 25%;
+  padding-right: 50px!important;
+  padding-left: 50px!important;
+  font-weight: bold !important;
+}
+.error {
+  border: 2px solid red !important;
+  background-color: #ffe6e6 !important; 
+  color: red !important;
+  outline: none !important; 
+  box-shadow: none !important; 
+}
