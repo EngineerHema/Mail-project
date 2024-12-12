@@ -10,6 +10,7 @@ import java.util.List;
 public class Email {
 
     @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-generate the ID
     @Column(name = "email_id")  // Custom column name
     private int id;

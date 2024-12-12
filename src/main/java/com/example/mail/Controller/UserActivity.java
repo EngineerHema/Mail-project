@@ -47,6 +47,7 @@ public class UserActivity {
         email.setSubject(requestBody.get("subject").toString());
 
 
+
         for (String toAddress : toAddresses) {
             email.setToAddress(toAddress);
 
