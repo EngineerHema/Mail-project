@@ -3,6 +3,7 @@ package com.example.mail.Controller;
 import com.example.mail.Service.EmailService;
 import com.example.mail.Security.ApiKeyManager;
 import com.example.mail.model.Email;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
