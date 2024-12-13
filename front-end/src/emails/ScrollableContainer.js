@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../style/Scrollablecontainer.css';
 import Email from './Card';
+import FilterList from './filter';
 
 const ScrollableContainer = ({ API_KEY, Address, type }) => {
   const [items, setItems] = useState([]);
@@ -44,9 +45,13 @@ const ScrollableContainer = ({ API_KEY, Address, type }) => {
           return {
             id: email.id,
             fromAddress: email.fromAddress,
+            toAddress : email.toAddress,
             subject: email.subject || "No Subject",
             body: email.body || "No Content",
             color: borderColor,
+            type : type,
+            time : email.timeStamp,
+            attachments : email.attachments,
           };
         });
 
@@ -65,18 +70,30 @@ const ScrollableContainer = ({ API_KEY, Address, type }) => {
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
   return (
-    <div>
+    <div className='page2'>
+     <FilterList></FilterList>
       <div className="scrollable-container">
-        {items.map((item) => (
-          <Email
-            key={item.id}
-            className="scrollable-item"
-            sender={item.fromAddress}
-            header={item.subject}
-            body={item.body}
-            color={item.color} // Dynamic border color based on priority
-          />
-        ))}
+      
+        {items.length === 0 ? (
+          <div className="no-emails-message">
+            No Emails
+          </div>
+        ) : (
+          items.map((item) => (
+            <Email
+              key={item.id}
+              className="scrollable-item"
+              sender={item.fromAddress}
+              header={item.subject}
+              body={item.body}
+              color={item.color} 
+              type={item.type}
+              receiver={item.toAddress}
+              time={item.time}
+              attachments={item.attachments}
+            />
+          ))
+        )}
       </div>
     </div>
   );

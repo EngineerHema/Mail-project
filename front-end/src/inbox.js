@@ -1,6 +1,7 @@
 import SideBar from "./Bars/SideBar";
 import NavBar from "./Bars/NavBar";
 import ScrollableContainer from "./emails/ScrollableContainer";
+import './style/Scrollablecontainer.css';
 
 
 

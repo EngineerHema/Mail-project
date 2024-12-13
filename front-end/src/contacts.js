@@ -5,7 +5,6 @@ function Contacts({ API_KEY, emailAddress, name }) {
     return (
      <div>
         <NavBar name={name}></NavBar>
-
         <SideBar></SideBar>
      </div>
     );

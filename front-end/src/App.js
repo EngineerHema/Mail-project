@@ -8,17 +8,14 @@ import ComposeEmail from './composeEmail';
 import Trash from './trash';
 import Contacts from './contacts';
 import Sent from './sent';
+import OpenEmail from './openEmail';
 
 
 
 function App() {
-
-
   const API_KEY = useRef(null);
   const emailAddress = useRef(null);
   const [name, setName] = useState(null);
-
-
 
   return (
     <Router>
@@ -38,6 +35,8 @@ function App() {
         <Route path="/mySent" element={<Sent API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
 
         <Route path="/myTrash" element={<Trash API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+
+        <Route path="/openEmail" element={<OpenEmail API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
 
         <Route path="/myContacts" element={<Contacts API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
 

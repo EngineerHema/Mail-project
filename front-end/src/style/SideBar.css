@@ -1,31 +1,16 @@
-/* Sidebar container */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 
-/* Sidebar container */
 .SideBarAll {
-  width: 12%; /* 15% of the screen width */
-  background-color: #343a40; /* Dark Bootstrap color */
+  width: 12%; 
+  background-color: #343a40; 
   color: white;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  height: 100%; /* Full height of the parent container */
-  position: relative; /* To stay in flow with the parent */
-  z-index: 1000; /* Ensure it stays above other elements */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+ 
+  max-height: 1000px;
 }
 
-/* Flex column style for navigation */
-.flex-column {
-  width: 100%;
-}
-
-/* Navigation item styles */
 .nav-item {
   font-size: 1.2rem; /* Slightly larger font */
   padding: 10px 15px;

@@ -1,0 +1,72 @@
+.page {
+    background-color: #42b7e2;
+    padding: 31px;  /* Increase padding to give more space around the page */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container_email {
+    background-color: #fff;
+    box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.15);  
+    border-radius: 15px; 
+    padding: 40px;  
+    max-width: 800px;  
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.subject {
+    font-size: 2rem;  /* Larger font size for the subject */
+    margin-bottom: 30px;  /* Increased margin between subject and details */
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.details {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;  /* More padding to space out the details */
+    margin-bottom: 30px;  /* Increased margin to separate details from body */
+}
+
+.info {
+    color: #555;
+    font-size: 1.2rem;  /* Slightly larger font size for info */
+}
+
+.body_email {
+    margin-bottom: 30px;  /* Increased margin to separate from other sections */
+}
+
+.bodyText {
+    line-height: 1.8;  /* Larger line height for better readability */
+    white-space: pre-line;
+    font-size: 1.1rem;  /* Slightly larger font size for body text */
+}
+
+.attachments {
+    margin-top: 30px;  /* More space between body and attachments */
+}
+
+.attachmentList {
+    list-style: none;
+    padding: 0;
+}
+
+.attachmentItem {
+    margin-bottom: 15px;  /* Increased space between attachment items */
+}
+
+.attachmentLink {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;  /* More emphasis on the links */
+    font-size: 1.1rem;  /* Slightly larger font size for links */
+}
+
+.noAttachments {
+    color: #aaa;
+    font-size: 1.1rem;  /* Larger font size for no attachments message */
+}
