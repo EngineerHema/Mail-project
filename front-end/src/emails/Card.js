@@ -4,7 +4,7 @@ import "../style/card.css";
 function Email({ sender, header, body, color, onDelete }) {
   return (
     <div className="card-container">
-        <Card border={color}  className="Card">
+        <Card border={color}  className="Card" style={{borderWidth: "5px"}}>
         <a href="URL" target="_blank" className="no-underline">
           <Card.Header className="card-header">
             <span>From {sender}</span>

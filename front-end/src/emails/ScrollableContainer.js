@@ -29,20 +29,20 @@ const ScrollableContainer = ({ API_KEY, Address, type }) => {
 
           switch (email.priority?.toLowerCase()) {
             case "high":
-              borderColor = "border-danger";
+              borderColor = "danger";
               break;
             case "medium":
-              borderColor = "border-warning";
+              borderColor = "warning";
               break;
             case "low":
-              borderColor = "border-success";
+              borderColor = "primary";
               break;
             default:
-              borderColor = "border-secondary"; // Default if no priority
+              borderColor = email.priority?.toLowerCase(); // Default if no priority
           }
 
           return {
-            id: email.id || index + 1,
+            id: email.id,
             fromAddress: email.fromAddress,
             subject: email.subject || "No Subject",
             body: email.body || "No Content",
