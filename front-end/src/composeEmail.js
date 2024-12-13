@@ -7,7 +7,6 @@ function ComposeEmail({ API_KEY, emailAddress, name}) {
     return (
      <div>
         
-       
         <NavBar name={name}></NavBar>
         <div className="container_composeEmail">
         <SideBar/>

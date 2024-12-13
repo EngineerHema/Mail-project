@@ -8,7 +8,7 @@ import "./style/openEmail.css"
 function OpenEmail({ API_KEY, emailAddress, name }) {
     const location = useLocation();
   
-    const { sender, header, body, color, receiver, time } = location.state || {};
+    const {sender, header, body, color, receiver, time} = location.state || {};
     return (
         <div>
             <NavBar name={name}/>

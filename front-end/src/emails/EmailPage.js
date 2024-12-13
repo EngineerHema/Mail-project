@@ -16,7 +16,7 @@ const EmailPage = ({time,header,sender,body,attachments,receiver,color}) => {
 
   return (
     <div className="page" >
-        <Card className="container_email"border={color} style={{borderWidth: "5px"}}>
+        <Card className="container_email" border={color} style={{borderWidth: "3px"}}>
         <h1 className="subject">{header}</h1>
         <div className="details">
           <p>

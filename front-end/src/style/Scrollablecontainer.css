@@ -9,7 +9,6 @@
     background-color: #42b7e2;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
-    display: flex;
     justify-content: flex-start; 
     align-items: flex-start;
     
@@ -31,3 +30,10 @@
     display: flex;
     align-items: stretch;
 }
+
+.search_filter_container{
+  display: flex;
+  align-items: stretch;
+
+}
+

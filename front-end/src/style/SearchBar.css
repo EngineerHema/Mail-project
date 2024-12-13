@@ -1,0 +1,36 @@
+/* Container for the search bar */
+.searchbar-container {
+    display: flex;
+    width: 100%; /* Make the container full width */
+  }
+  
+  /* Dark-themed search input field */
+  .searchbar-container .form-control {
+    background-color: #333;  /* Dark background */
+    color: white;            /* White text */
+    border: 1px solid #555; /* Slightly lighter border */
+    width: 100%;             /* Full width */
+  }
+  
+  /* Focus state of the input */
+  .searchbar-container .form-control:focus {
+    background-color: #444; /* Slightly darker background on focus */
+    border-color: #888;     /* Light border on focus */
+    box-shadow: none;       /* Remove shadow from focus */
+  }
+  
+  /* Dark theme button */
+  .searchbar-container .btn-primary {
+    background-color: #555;   /* Darker button background */
+    border-color: #444;       /* Darker button border */
+    color: white;             /* White text */
+    margin-left: 10px;        /* Space between input and button */
+  }
+  
+  /* Button hover effect */
+  .searchbar-container .btn-primary:hover {
+    background-color: #666;   /* Lighter button background on hover */
+    border-color: #555;       /* Slightly lighter border on hover */
+  }
+  
+  

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import '../style/Scrollablecontainer.css';
 import Email from './Card';
 import FilterList from './filter';
+import SearchBar from "../SearchBar";
+
 
 const ScrollableContainer = ({ API_KEY, Address, type }) => {
   const [items, setItems] = useState([]);
@@ -27,7 +29,6 @@ const ScrollableContainer = ({ API_KEY, Address, type }) => {
         const formattedEmails = emails.map((email, index) => {
           let borderColor;
           console.log(email.priority?.toLowerCase())
-
           switch (email.priority?.toLowerCase()) {
             case "high":
               borderColor = "danger";
@@ -36,7 +37,7 @@ const ScrollableContainer = ({ API_KEY, Address, type }) => {
               borderColor = "warning";
               break;
             case "low":
-              borderColor = "primary";
+              borderColor = "success";
               break;
             default:
               borderColor = email.priority?.toLowerCase(); // Default if no priority
@@ -71,9 +72,12 @@ const ScrollableContainer = ({ API_KEY, Address, type }) => {
 
   return (
     <div className='page2'>
-     <FilterList></FilterList>
+     
       <div className="scrollable-container">
-      
+        <div className='search_filter_container'>
+        <FilterList/>
+      <SearchBar/>
+      </div>
         {items.length === 0 ? (
           <div className="no-emails-message">
             No Emails
