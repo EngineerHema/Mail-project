@@ -2,6 +2,7 @@ package com.example.mail.Controller;
 
 import com.example.mail.Service.EmailService;
 import com.example.mail.Security.ApiKeyManager;
+import com.example.mail.model.Attachment;
 import com.example.mail.model.Email;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,51 +25,74 @@ public class UserActivity {
     @Autowired
     private EmailService emailService;
 
-    // Send Email Endpoint
     @PostMapping("/sendEmail")
-    public ResponseEntity<String> sendEmail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String,Object> requestBody) throws ExecutionException, InterruptedException {
+    public ResponseEntity<String> sendEmail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
+        // Extract API key from the Authorization header
         String apiKey = extractApiKey(authorization);
         System.out.println("Key: " + apiKey);
-        Email email = new Email();
-        List<String> toAddresses = (List<String>) requestBody.get("toAddress");
-        boolean sent = false;
 
-
-        if (apiKey == null || requestBody.get("fromAddress").toString() == null) {
+        // Check if the required parameters are present
+        if (apiKey == null || requestBody.get("fromAddress") == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or sender email.");
         }
-        if (!apiKeyManager.validateApiKey(requestBody.get("fromAddress").toString(), apiKey)) {
+
+        // Validate the API key
+        String fromAddress = requestBody.get("fromAddress").toString();
+        if (!apiKeyManager.validateApiKey(fromAddress, apiKey)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
         }
 
-        email.setFromAddress(requestBody.get("fromAddress").toString());
-        email.setAttachments((List<byte[]>) requestBody.get("attachments"));
+        // Create a new Email object and set its properties
+        Email email = new Email();
+        email.setFromAddress(fromAddress);
         email.setBody(requestBody.get("body").toString());
         email.setPriority(requestBody.get("priority").toString());
         email.setSubject(requestBody.get("subject").toString());
 
-
-
-        for (String toAddress : toAddresses) {
-            email.setToAddress(toAddress);
-
-            if (apiKeyManager.validateApiKey(email.getFromAddress(), apiKey)) {
-                sent = emailService.sendEmail(email);
-
+        // Set the attachments after processing them
+        List<Map<String, Object>> attachmentData = (List<Map<String, Object>>) requestBody.get("attachments");
+        List<Attachment> attachments = new ArrayList<>();
+        if (attachmentData != null) {
+            for (Map<String, Object> attachmentMap : attachmentData) {
+                Attachment attachment = new Attachment();
+                attachment.setContent((String) attachmentMap.get("content"));
+                attachment.setName((String) attachmentMap.get("name"));
+                attachment.setType((String) attachmentMap.get("type"));
+                attachment.setSize(Long.parseLong(attachmentMap.get("size").toString()));
+                attachments.add(attachment);
+                email.addAttachment(attachment);
             }
         }
-            if (sent) {
-                return ResponseEntity.ok("Email sent successfully!");
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User validation failed.");
-            }
+        email.setAttachments(attachments);
+
+        // Ensure "toAddress" exists and is a list
+        List<String> toAddresses = (List<String>) requestBody.get("toAddress");
+        if (toAddresses == null || toAddresses.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing recipient address.");
+        }
+
+        // Send the email to all recipients
+        boolean sent = false;
+        for (String toAddress : toAddresses) {
+            email.setToAddress(toAddress);
+            sent = emailService.sendEmail(email);
+        }
+
+        // Return response based on whether the email was sent successfully
+        if (sent) {
+            return ResponseEntity.ok("Email sent successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User validation failed.");
+        }
     }
+
 
     @GetMapping("/getEmail")
     public ResponseEntity<List<Email>> getEmails(
             @RequestHeader("Authorization") String authorization,
             @RequestParam("Address") String address,
-            @RequestParam(value = "type", required = false) String type) throws ExecutionException, InterruptedException {
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "sort", required = false) String sort) throws ExecutionException, InterruptedException {
 
         String apiKey = extractApiKey(authorization);
         System.out.println("Key: " + apiKey);
@@ -78,7 +102,7 @@ public class UserActivity {
         }
 
         if (apiKeyManager.validateApiKey(address, apiKey)) {
-            List<Email> emails = emailService.returnEmails(address, type);
+            List<Email> emails = emailService.returnEmails(address, type, sort);
             return ResponseEntity.ok(emails);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);

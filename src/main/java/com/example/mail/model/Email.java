@@ -1,54 +1,48 @@
 package com.example.mail.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime; // for time_stamp if it's a date-time value
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Email {
 
     @Id
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-generate the ID
-    @Column(name = "email_id")  // Custom column name
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "email_id")
     private int id;
 
-    @Column(name = "subject")  // Custom column name
+    @Column(name = "subject")
     private String subject;
 
-    @Column(name = "time_stamp")  // Custom column name
-    private LocalDateTime timeStamp;  // changed to LocalDateTime for better handling of timestamps
+    @Column(name = "time_stamp")
+    private LocalDateTime timeStamp;
 
-    @Column(name = "from_address")  // Custom column name
-    private String fromAddress;  // renamed to match Java convention
+    @Column(name = "from_address")
+    private String fromAddress;
 
-    @Column(name = "to_address")  // Custom column name
-    private String toAddress;  // renamed to match Java convention
+    @Column(name = "to_address")
+    private String toAddress;
 
-    public String getPriority() {
-        return priority;
-    }
+    @Column(name = "priority")
+    private String priority;
 
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
-
-    @Column(name = "priority")  // Custom column name
-    private String priority;  // renamed to match Java convention
-
-    @Column(name = "body")  // Custom column name
+    @Column(name = "body")
     private String body;
 
-    @Column(name = "attachments")  // Custom column name
-    private List<byte[]> attachments;
+    @OneToMany(mappedBy = "email", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Attachment> attachments = new ArrayList<>();
 
-    @Column(name = "type")  // Custom column name
+    @Column(name = "type")
     private String type;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")  // Foreign key to User entity
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @JsonBackReference
     private User user;
 
@@ -101,12 +95,26 @@ public class Email {
         this.body = body;
     }
 
-    public List<byte[]> getAttachments() {
+    public List<Attachment> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(List<byte[]> attachments) {
+    public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
+    }
+
+    public void addAttachment(Attachment attachment) {
+        attachment.setEmail(this);
+        attachments.add(attachment);
+    }
+
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
     public String getType() {

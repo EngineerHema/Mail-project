@@ -19,16 +19,14 @@ public class SortStratagyImp implements SortStratagy {
     @Override
     public Sort <Email> setSortingStrategy(String type){
         switch (type.toLowerCase()) {
-            case "timeNewToOld":
-                return null;
-            case "timeOldToNew":
-                return null;
-            case "PriorityHighToLow":
-                return null;
-            case "PriorityLowToHigh":
-                return null;
+            case "timenewtoold":
+                return sortTimeNewToOld;
+            case "timeoldtonew":
+                return sortTimeOldToNew;
+            case "prioritylowtohigh":
+                return sortPriorityLowToHigh;
             default:
-                return null;
+                return sortPriorityHighToLow;
         }
     }
 }

@@ -16,7 +16,7 @@ public class SortPriorityHighToLow implements Sort<Email>{
     private static int getPriorityValue(Email email) {
         return switch (email.getPriority().toUpperCase()) {
             case "HIGH" -> 1;
-            case "MID" -> 2;
+            case "MEDIUM" -> 2;
             case "LOW" -> 3;
             default -> Integer.MAX_VALUE;
         };
