@@ -54,7 +54,6 @@ function LoginForm({ API_KEY, emailAddress ,setName}) {
     };
 
     try {
-      navigate('/myInbox'); 
       console.log(loginData);
       const response = await axios.post('http://localhost:8080/signIn', loginData, {
         headers: {
@@ -63,6 +62,7 @@ function LoginForm({ API_KEY, emailAddress ,setName}) {
       });
 
       if (response.status === 200) {
+        navigate('/myInbox'); 
         // On successful login, redirect to another page, e.g., dashboard or home
         emailAddress.current = email
         alert(response.data.message);

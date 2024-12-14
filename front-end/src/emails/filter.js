@@ -8,7 +8,7 @@ function FilterList() {
   return (
     <Navbar variant="dark" bg="dark" expand="lg" className='filter_list'>
       <Container fluid>
-        <Navbar.Brand href="#home">Filter By :</Navbar.Brand>
+        <Navbar.Brand href="#home">Sort By :</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-dark-example" />
         <Navbar.Collapse id="navbar-dark-example">
           <Nav>

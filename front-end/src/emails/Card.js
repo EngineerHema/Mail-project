@@ -57,8 +57,6 @@ function Email({ sender, header, body, color, onDelete ,type,receiver,time,attac
               Delete
             </button>
           </Card.Header>
-          
-
           <Card.Body className="Body_Card">
             <Card.Title>{header}</Card.Title>
             <Card.Text>{body}</Card.Text>
