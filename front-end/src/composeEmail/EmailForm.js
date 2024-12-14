@@ -52,7 +52,7 @@ const EmailForm = ({API_KEY, emailAddress}) => {
         const fileObject = {
           name: file.name,
           type: file.type,
-          size: file.size,
+          size: `${file.size}`,
           content: fileContent,
         };
 
