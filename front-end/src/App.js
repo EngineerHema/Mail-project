@@ -16,6 +16,8 @@ function App() {
   const API_KEY = useRef(null);
   const emailAddress = useRef(null);
   const [name, setName] = useState(null);
+  const sortMethod = useRef(null);
+
 
   return (
     <Router>
@@ -28,15 +30,15 @@ function App() {
              
         <Route path="/register" element={<SignUpForm/>} />
 
-        <Route path="/myInbox" element={<Inbox API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+        <Route path="/myInbox" element={<Inbox API_KEY = {API_KEY} emailAddress={emailAddress} name={name} sortMethod={sortMethod}/>} />
         
         <Route path="/myComposeEmail" element={<ComposeEmail API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
 
-        <Route path="/mySent" element={<Sent API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+        <Route path="/mySent" element={<Sent API_KEY = {API_KEY} emailAddress={emailAddress} name={name} sortMethod={sortMethod}/>} />
 
-        <Route path="/myTrash" element={<Trash API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+        <Route path="/myTrash" element={<Trash API_KEY = {API_KEY} emailAddress={emailAddress} name={name} sortMethod={sortMethod}/>} />
 
-        <Route path="/openEmail" element={<OpenEmail API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+        <Route path="/openEmail" element={<OpenEmail API_KEY = {API_KEY} emailAddress={emailAddress} name={name} />} />
 
         <Route path="/myContacts" element={<Contacts API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
 

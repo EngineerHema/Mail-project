@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../style/Scrollablecontainer.css';
 import Email from './Card';
 import FilterList from './filter';
 import SearchBar from "../SearchBar";
 
 
-const ScrollableContainer = ({ API_KEY, Address, type }) => {
+const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
   const [items, setItems] = useState([]);
 
   const fetchEmails = async () => {
@@ -13,6 +13,9 @@ const ScrollableContainer = ({ API_KEY, Address, type }) => {
       const url = new URL("http://localhost:8080/getEmail");
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("type", type);
+      url.searchParams.append("sort", sortMethod?.current.replace(/\s+/g,'') || "default"); //timenewtoold,timeoldtonew,prioritylowtohigh
+      //priorityhightolow, CaSe doesnot matter
+
 
       const response = await fetch(url, {
         method: "GET",
@@ -70,12 +73,14 @@ const ScrollableContainer = ({ API_KEY, Address, type }) => {
     fetchEmails();
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
+
+
   return (
     <div className='page2'>
      
       <div className="scrollable-container">
         <div className='search_filter_container'>
-        <FilterList/>
+        <FilterList sortMethod={sortMethod}/>
       <SearchBar/>
       </div>
         {items.length === 0 ? (

@@ -3,8 +3,13 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import "../style/filterlist.css"
+import { useRef } from 'react';
 
-function FilterList() {
+function FilterList({ sortMethod }) {
+  const handleSelect = (method) => {
+    sortMethod.current=method;
+  };
+
   return (
     <Navbar variant="dark" bg="dark" expand="lg" className='filter_list'>
       <Container fluid>
@@ -14,12 +19,22 @@ function FilterList() {
           <Nav>
             <NavDropdown
               id="nav-dropdown-dark-example"
-              title="Dropdown"
-              menuVariant="dark" className='list'>
-              <NavDropdown.Item href="#action/3.1">Time old to new</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Time new to old</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">priority high to low</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">priority low to high</NavDropdown.Item>
+              title= {sortMethod?.current || "Dropdown"}
+              menuVariant="dark"
+              className='list'
+            >
+              <NavDropdown.Item onClick={() => handleSelect("Time Old To New")}>
+                Time old to new
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => handleSelect("Time New To Old")}>
+                Time new to old
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => handleSelect("Priority High To Low")}>
+                Priority high to low
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => handleSelect("Priority Low To High")}>
+                Priority low to high
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
