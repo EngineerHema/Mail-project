@@ -1,32 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Overall Email Form Styling */
 .email-form {
   width: 75%;
   padding: 20px;
-  background-color: #fff;
+  background: #111111;
   margin-top: 2%;
   margin-left: 6%;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  color: #ffffff; /* White text */
+  border: 1px solid #00ff00;
 }
 
+/* Heading Styling */
 h2 {
   text-align: center;
   margin-bottom: 20px;
   font-size: 24px;
-  color: #333;
+  font-weight: 500;
+  color: #00ff00; /* Neon green */
 }
 
+/* Form Group - Wrapper for Input Fields */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
+/* Labels */
 label {
   font-size: 14px;
-  color: #555;
+  font-weight: 500;
+  color: #00ff00; /* Neon green for labels */
   margin-bottom: 5px;
   display: block;
 }
 
+/* Input and Textarea Styling */
 input[type="email"],
 input[type="text"],
 textarea,
@@ -34,81 +45,123 @@ input[type="file"],
 select {
   width: 100%;
   padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  margin-top: 5px;
+  border: 1px solid #444; /* Subtle border */
+  background-color: #222; /* Darker background */
+  color: #ffffff; /* White text */
+  border-radius: 5px;
   font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 input[type="email"]:focus,
 input[type="text"]:focus,
 textarea:focus,
-input[type="file"]:focus,
 select:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #00ff00; /* Green focus border */
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.6); /* Green glow */
 }
 
+/* Textarea Specifics */
 textarea {
   resize: vertical;
+  height: 120px;
 }
 
-select {
-  appearance: none;
-  background-color: #fff;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"%3E%3Cpath d="M5 7l5 5 5-5H5z" fill="%23777"%3E%3C/path%3E%3C/svg%3E');
-  background-position: right 10px center;
-  background-repeat: no-repeat;
-}
-
+/* Submit Button */
 .submit-btn {
   width: 100%;
   padding: 12px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #00ff00;
+  color: #000000; /* Black text */
   border: none;
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .submit-btn:hover {
-  background-color: #0056b3;
+  background-color: #007c00; /* Darker green */
+  transform: scale(1.02); /* Slight pop effect */
 }
 
-.attachment-name {
-  font-size: 12px;
-  color: #555;
-  margin-top: 5px;
-  word-wrap: break-word;
-}
-
+/* Add Recipient Button */
 .add-recipient-btn {
-  display: inline-block;
-  padding: 5px 10px; /* Smaller padding for compactness */
-  font-size: 14px; /* Smaller font size */
-  background-color: green; /* Standard blue button color */
-  color: #fff; /* White text */
-  border: none; /* Remove border */
-  border-radius: 4px; /* Slightly rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth hover effect */
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #00ff00;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1%;
 }
 
 .add-recipient-btn:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #007c00;
 }
 
+/* Recipient List Styling */
+.recipient-list {
+  margin-top: 10px;
+  list-style: none;
+  padding: 0;
+}
 
-/* Fancy Priority Dropdown Styling */
-.priority-dropdown {
-  padding: 10px;
-  width: 100%;
-  font-size: 14px;
-  border: 1px solid #ccc;
+.recipient-list li {
+  color: #ffffff;
+  background-color: #333;
+  padding: 5px 10px;
   border-radius: 4px;
-  transition: all 0.3s ease;
+  margin: 5px 0;
+}
+
+/* Attachments Styling */
+.attachment-list {
+  list-style: none;
+  padding: 0;
+}
+
+.attachment-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  background-color: #333;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin: 5px 0;
+}
+
+/* Delete Attachment Button */
+.delete-attachment-btn {
+  padding: 4px 8px;
+  background-color: #ff4d4d;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-attachment-btn:hover {
+  background-color: #cc0000;
+}
+
+/* Dropdown Styling */
+.priority-dropdown {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #222;
+  color: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .priority-dropdown.high {
@@ -127,23 +180,6 @@ select {
 }
 
 .priority-dropdown:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.delete-attachment-btn {
-  margin-left: 10px;
-  padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.delete-attachment-btn:hover {
-  background-color: #cc0000;
+  border-color: #00ff00;
+  box-shadow: 0 0 5px rgba(0, 255, 0, 0.6);
 }

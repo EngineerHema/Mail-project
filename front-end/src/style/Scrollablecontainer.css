@@ -1,12 +1,10 @@
-.page2{
-  background-color: #42b7e2;
-}
+
 .scrollable-container {
     height: calc(100vh - 70px); 
     overflow-y: auto;
     width: calc(200vh - 20px);
     padding: 20px;
-    background-color: #42b7e2;
+    background-color: #000000;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
     justify-content: flex-start; 

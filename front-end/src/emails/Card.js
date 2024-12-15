@@ -1,10 +1,20 @@
-import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import "../style/card.css";
-import axios from 'axios';
+import axios from "axios";
 
-function Email({Address, id, sender, header, body, color, type, receiver, time, attachments, API_KEY }) {
-
+function Email({
+  Address,
+  id,
+  sender,
+  header,
+  body,
+  color,
+  type,
+  receiver,
+  time,
+  attachments,
+  API_KEY,
+}) {
   let head = type === "sent" ? `For: ${receiver}` : `From: ${sender}`;
 
   const CoolDate = ({ time }) => {
@@ -19,15 +29,19 @@ function Email({Address, id, sender, header, body, color, type, receiver, time, 
       const daySuffix = (day) => {
         if (day > 3 && day < 21) return "th";
         switch (day % 10) {
-          case 1: return "st";
-          case 2: return "nd";
-          case 3: return "rd";
-          default: return "th";
+          case 1:
+            return "st";
+          case 2:
+            return "nd";
+          case 3:
+            return "rd";
+          default:
+            return "th";
         }
       };
       return `${day}${daySuffix(day)} ${month} ${year} | ${hours}:${minutes}:${seconds}`;
     };
-    return <span className='time'>{formatCustomDateFromString(time)}</span>;
+    return <span className="time">{formatCustomDateFromString(time)}</span>;
   };
 
   const handleDelete = async (e) => {
@@ -37,8 +51,7 @@ function Email({Address, id, sender, header, body, color, type, receiver, time, 
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("id", id);
 
-      console.log("At del:" + API_KEY.current)
-
+      console.log("At del:" + API_KEY.current);
 
       const response = await fetch(url, {
         method: "DELETE",
@@ -58,21 +71,27 @@ function Email({Address, id, sender, header, body, color, type, receiver, time, 
   };
 
   return (
-    <div className="card-container">
-      <Card border={color} className="Card" style={{ borderWidth: "5px" }}>
-        <Card.Header className="card-header">
-          <Link to="/openEmail" state={{ sender, header, body, color, receiver, time }}>
-            <span className={type === 'sent' ? "for" : "from"}>{head}</span>
+    <div className="email-card-container">
+      <div className="email-card">
+        <div className="email-card-header">
+          <div className="priority-indicator" style={{ backgroundColor: color }}></div>
+          <Link
+            to="/openEmail"
+            state={{ sender, header, body, color, receiver, time }}
+            className="email-card-link"
+          >
+            <span className={type === "sent" ? "for" : "from"}>{head}</span>
           </Link>
           <CoolDate time={time} />
-          <button className="delete-button" onClick={handleDelete}>Delete</button>
-        </Card.Header>
-        <Card.Body className="Body_Card">
-          <Card.Title>{header}</Card.Title>
-          <Card.Text>{body}</Card.Text>
-        </Card.Body>
-      </Card>
-      <br />
+          <button className="delete-button" onClick={handleDelete}>
+            Delete
+          </button>
+        </div>
+        <div className="email-card-body">
+          <h3 className="email-title">{header}</h3>
+          <p className="email-body">{body}</p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,3 +1,7 @@
+body{
+    background-color: black;
+}
+
 .container_composeEmail{
     display: flex;
     align-items: stretch;
