@@ -16,7 +16,7 @@ function App() {
   const API_KEY = useRef(null);
   const emailAddress = useRef(null);
   const [name, setName] = useState(null);
-  const sortMethod = useRef(null);
+  const sortMethod = useRef("PriorityHighToLow");
 
 
   return (

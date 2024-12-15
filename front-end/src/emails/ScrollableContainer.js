@@ -91,7 +91,9 @@ const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
           items.map((item) => (
             <Email
               key={item.id}
+              Address={Address}
               className="scrollable-item"
+              id={item.id}
               sender={item.fromAddress}
               header={item.subject}
               body={item.body}
@@ -100,6 +102,7 @@ const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
               receiver={item.toAddress}
               time={item.time}
               attachments={item.attachments}
+              API_KEY={API_KEY}
             />
           ))
         )}

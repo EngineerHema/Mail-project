@@ -3,11 +3,14 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import "../style/filterlist.css"
-import { useRef } from 'react';
 
 function FilterList({ sortMethod }) {
   const handleSelect = (method) => {
     sortMethod.current=method;
+    
+    if(sortMethod?.current === null || sortMethod?.current === undefined){
+    sortMethod.current="PriorityHighToLow";
+    }
   };
 
   return (
@@ -19,7 +22,7 @@ function FilterList({ sortMethod }) {
           <Nav>
             <NavDropdown
               id="nav-dropdown-dark-example"
-              title= {sortMethod?.current || "Dropdown"}
+              title= {sortMethod?.current || "PriorityHighToLow"}
               menuVariant="dark"
               className='list'
             >

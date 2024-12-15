@@ -27,6 +27,8 @@ function App() {
     .catch(error => {
       console.error("Error with contact operation:", error);
     });
+
+    console.log("Id: "+id);
   };
 
   // Handle adding or editing a contact
