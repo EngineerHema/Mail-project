@@ -54,6 +54,25 @@ public class EmailService {
     }
 
 
+    public boolean deleteEmail(String id) {
+        try {
+            Optional<Email> email = jpaEmails.findById(Integer.parseInt(id));
+            if (email.isPresent()){
+                if (email.get().getType().equals("trash")){
+                    jpaEmails.delete(email.get());
+                }else {
+                    email.get().setType("trash");
+                    jpaEmails.save(email.get());
+                }
+            }
+            return true;
+        }catch (Error e){
+            System.out.println("At delete: "+e);
+            return false;
+        }
+    }
+
+
     public List<Email> returnEmails(String Address, String type, String sort) {
         try {
 

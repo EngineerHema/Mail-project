@@ -110,6 +110,28 @@ public class UserActivity {
     }
 
 
+    @DeleteMapping("/deleteEmail")
+    public ResponseEntity<?> deleteEmail(
+            @RequestHeader("Authorization") String authorization,
+            @RequestParam("Address") String address,
+            @RequestParam(value = "id", required = true) String id) throws ExecutionException, InterruptedException {
+
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        if (apiKey == null || address == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing key or active address!");
+        }
+
+        if (apiKeyManager.validateApiKey(address, apiKey)) {
+            if (emailService.deleteEmail(id)) return ResponseEntity.ok("Email is deleted!");
+            else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email not found!");
+
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+    }
+
     // Extract API Key from Authorization Header
     private String extractApiKey(String authorization) {
         if (authorization != null && authorization.startsWith("Bearer ")) {
