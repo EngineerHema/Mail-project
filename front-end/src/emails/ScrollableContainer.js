@@ -7,7 +7,6 @@ import SearchBar from "./SearchBar";
 
 const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
   const [items, setItems] = useState([]);
-
   const fetchEmails = async () => {
     try {
       const url = new URL("http://localhost:8080/getEmail");
@@ -32,13 +31,13 @@ const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
           console.log(email.priority?.toLowerCase())
           switch (email.priority?.toLowerCase()) {
             case "high":
-              borderColor = "danger";
+              borderColor = "red";
               break;
             case "medium":
-              borderColor = "warning";
+              borderColor = "yellow";
               break;
             case "low":
-              borderColor = "success";
+              borderColor = "green";
               break;
             default:
               borderColor = email.priority?.toLowerCase(); // Default if no priority
@@ -75,7 +74,6 @@ const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
 
   return (
     <div className='page2'>
-     
       <div className="scrollable-container">
         <div className='search_filter_container'>
         <FilterList sortMethod={sortMethod}/>

@@ -1,5 +1,5 @@
 .page {
-    background-color: #42b7e2;
+    background-color: #000000;
     padding: 31px;  /* Increase padding to give more space around the page */
     display: flex;
     justify-content: center;
@@ -7,9 +7,10 @@
 }
 
 .container_email {
-    background-color: #fff;
+    background-color: #111111;
     box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.15);  
-    border-radius: 15px; 
+    border-radius:  15px;
+    border: #00ff00 1px solid;
     padding: 40px;  
     max-width: 800px;  
     width: 100%;
@@ -26,13 +27,13 @@
 }
 
 .details {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #009000;
     padding-bottom: 15px;  /* More padding to space out the details */
     margin-bottom: 30px;  /* Increased margin to separate details from body */
 }
 
 .info {
-    color: #555;
+    color: #c4c4c4;
     font-size: 1.2rem;  /* Slightly larger font size for info */
 }
 
