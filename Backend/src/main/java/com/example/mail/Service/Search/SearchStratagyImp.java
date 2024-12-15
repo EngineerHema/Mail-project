@@ -37,8 +37,10 @@ public class SearchStratagyImp implements SearchStratagy {
                     return searchReceiver;
             case "sender":
                         return searchSender;
+            case "searchall":
+                return searchAll;
             default:
-                return searchBody;
+                return searchAll ;
         }
   }
 }

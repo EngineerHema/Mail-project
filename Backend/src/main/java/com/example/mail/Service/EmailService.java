@@ -85,9 +85,10 @@ public class EmailService {
             System.out.println(emails);
             Filter<Email> filter = filterStrategy.setFilteringStrategy(type);
             Sort<Email> sortingMethod = sortStratagy.setSortingStrategy(sort);
-            Search<Email> searchingMethod = searchStratagy.setSearchingStrategy(search);
+           // Search<Email> searchingMethod = searchStratagy.setSearchingStrategy(search);
             emails = filter.applyFilter(emails);
             emails = sortingMethod.applySort(emails);
+           // emails = searchingMethod.applySearch(emails, substring);
             System.out.println(emails);
 
             return emails;

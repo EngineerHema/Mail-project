@@ -17,7 +17,7 @@ const SearchBox = ({ placeholder = "Search..." }) => {
         onChange={(e) => setValue(e.target.value)}
         className={styles.input}
       />
-      <span onClick={handleClear} className={styles.span}></span>
+    
     </div>
   );
 };

@@ -23,6 +23,7 @@ public class FilterStrategyImp implements FilterStrategy {
 
     @Override
     public Filter<Email> setFilteringStrategy(String type) {
+
         switch (type.toLowerCase()) {
             case "sent":
                 return sentFilter;

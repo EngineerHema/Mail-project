@@ -5,6 +5,7 @@ import FilterList from './filter';
 import SearchBar from "./SearchBar";
 
 
+
 const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
   const [items, setItems] = useState([]);
   const fetchEmails = async () => {
@@ -75,9 +76,15 @@ const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
   return (
     <div className='page2'>
       <div className="scrollable-container">
+        <div className='allSearchFilter'>
         <div className='search_filter_container'>
+        
         <FilterList sortMethod={sortMethod}/>
-      <SearchBar/>
+        <FilterList sortMethod={sortMethod}/>
+        <SearchBar/>
+      
+      
+      </div>
       </div>
         {items.length === 0 ? (
           <div className="no-emails-message">

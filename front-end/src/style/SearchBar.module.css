@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
-
 .search-box {
-	border: solid 5px black;
+	margin-top: -2px;
+	border: solid 5px  #00ff00;
+	max-height: 70px;
 	display: inline-block;
 	position: relative;
 	border-radius: 50px;
@@ -23,7 +23,7 @@
 			width: 300px;
 			transition: width 800ms cubic-bezier(0.5, -0.5, 0.5, 1.5);
 			+ span {
-				bottom: 13px;
+				bottom: 16px;
 				right: 10px;
 				transition: bottom 300ms ease-out 800ms, right 300ms ease-out 800ms;
 			}
@@ -36,6 +36,7 @@
 		}
 	}
 	span {
+		
 		width: 25px;
 		height: 25px;
 		display: flex;
@@ -48,11 +49,12 @@
 		&:before, &:after {
 			content: '';
 			height: 25px;
-			border-left: solid 5px black;
+			border-left: solid 5px #00ff00;
 			position: absolute;
 			transform: rotate(-45deg);
 		}
 		&:after {
+			
 			transform: rotate(45deg);
 			opacity: 0;
 			top: -20px;
