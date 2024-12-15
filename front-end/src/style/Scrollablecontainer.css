@@ -1,26 +1,39 @@
+.page2{
+  background-color: #42b7e2;
+}
 .scrollable-container {
     height: calc(100vh - 70px); 
     overflow-y: auto;
-    
+    width: calc(200vh - 20px);
     padding: 20px;
-    background-color: #8a8a8a;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #42b7e2;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
+    justify-content: flex-start; 
+    align-items: flex-start;
     
   }
-  
-  .scrollable-item {
-    width: 1100px;
-    height: 155px;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #e6e6e6;
-    border-radius: 4px;
-    border: 1px solid #ddd;
+  .no-emails-message {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    height: 100%; /* Ensures it takes up full height of the parent */
+    width: 100%;
+    text-align: center;
+    font-size: 50px;
+    color: #888;
+    padding: 20px;
+    animation: hideMessage 3s forwards; 
   }
 
 .scrollable_flex {
     display: flex;
-    justify-content: space-between; /* Adjust spacing between the elements */
-    align-items: stretch; /* Ensure elements align evenly vertically */
+    align-items: stretch;
 }
+
+.search_filter_container{
+  display: flex;
+  align-items: stretch;
+
+}
+

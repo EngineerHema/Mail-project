@@ -1,39 +1,35 @@
-.SideBarAll {
-    width: 200px; /* Increased width for better usability */
-   
 
-    background-color: #343a40; /* Dark Bootstrap color */
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  }
-  
-  .flex-column {
-    width: 100%;
-  }
-  
-  .nav-item {
-    font-size: 1.2rem; /* Slightly larger font */
-    padding: 10px 15px;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    text-align: center;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    margin-top: 20%;
-  }
-  
-  .nav-item:hover {
-    background-color: #495057; /* Slightly lighter gray */
-    color: #007bff; /* Gold hover color */
-  }
-  
-  .nav-item.active {
-    background-image: linear-gradient(to bottom, #ffffff, rgb(247, 247, 247));/* Gold active link */
-    color: #343a40; /* Dark text for contrast */
-   
-  }
-  
+.SideBarAll {
+  width: 12%; 
+  background-color: #343a40; 
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+ 
+  max-height: 1000px;
+}
+
+.nav-item {
+  font-size: 1.2rem; /* Slightly larger font */
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-top: 20%; /* Adjust spacing between items */
+}
+
+/* Hover effect for nav items */
+.nav-item:hover {
+  background-color: #495057; /* Slightly lighter gray */
+  color: #007bff; /* Blue hover color */
+}
+
+/* Active nav item styling */
+.nav-item.active {
+  background-image: linear-gradient(to bottom, #ffffff, rgb(247, 247, 247)); /* Light gradient for active link */
+  color: #343a40; /* Dark text for contrast */
+}

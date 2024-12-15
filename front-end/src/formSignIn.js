@@ -62,9 +62,9 @@ function LoginForm({ API_KEY, emailAddress ,setName}) {
       });
 
       if (response.status === 200) {
+        navigate('/myInbox'); 
         // On successful login, redirect to another page, e.g., dashboard or home
         emailAddress.current = email
-        navigate('/myInbox'); 
         alert(response.data.message);
         console.log(response.data.apiKey);
         API_KEY.current = response.data.apiKey;

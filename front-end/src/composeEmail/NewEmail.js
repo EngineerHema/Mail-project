@@ -1,5 +1,6 @@
 export class Email {
-  constructor(fromAddress, toAddress, subject, body, attachments, priority) {
+  constructor(id, fromAddress, toAddress, subject, body, attachments, priority) {
+    this.id = id
     this.fromAddress = fromAddress;
     this.toAddress = toAddress; // Array of strings
     this.subject = subject;
@@ -53,6 +54,7 @@ export class EmailBuilder {
 
   build() {
     return new Email(
+      this.id,
       this.fromAddress,
       this.toAddress,
       this.subject,
