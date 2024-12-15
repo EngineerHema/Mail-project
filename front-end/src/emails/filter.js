@@ -7,7 +7,6 @@ import "../style/filterlist.css"
 function FilterList({ sortMethod }) {
   const handleSelect = (method) => {
     sortMethod.current=method;
-    
     if(sortMethod?.current === null || sortMethod?.current === undefined){
     sortMethod.current="PriorityHighToLow";
     }

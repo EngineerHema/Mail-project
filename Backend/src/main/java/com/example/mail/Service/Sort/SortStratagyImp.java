@@ -1,4 +1,5 @@
-package com.example.mail.Service;
+package com.example.mail.Service.Sort;
+
 
 import com.example.mail.model.Email;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class SortStratagyImp implements SortStratagy {
         this.sortPriorityLowToHigh = sortPriorityLowToHigh ;
     }
     @Override
-    public Sort <Email> setSortingStrategy(String type){
+    public Sort<Email> setSortingStrategy(String type){
         switch (type.toLowerCase()) {
             case "timenewtoold":
                 return sortTimeNewToOld;

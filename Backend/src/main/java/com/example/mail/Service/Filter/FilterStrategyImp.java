@@ -1,4 +1,4 @@
-package com.example.mail.Service;
+package com.example.mail.Service.Filter;
 
 import com.example.mail.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
