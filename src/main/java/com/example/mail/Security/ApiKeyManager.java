@@ -1,11 +1,8 @@
 package com.example.mail.Security;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.concurrent.*;
-
 
 @Component
 public class ApiKeyManager {
@@ -18,9 +15,6 @@ public class ApiKeyManager {
     private Map<String, String> apiKeyMap3;
     private Map<String, String> apiKeyMap4;
 
-    // Executor service for concurrent lookup
-    private ExecutorService executorService;
-
     // Counter to track which map to use for adding new API keys
     private int mapCounter = 0;
 
@@ -30,7 +24,6 @@ public class ApiKeyManager {
         this.apiKeyMap2 = new HashMap<>();
         this.apiKeyMap3 = new HashMap<>();
         this.apiKeyMap4 = new HashMap<>();
-        this.executorService = Executors.newFixedThreadPool(4); // Thread pool with 4 threads for concurrent tasks
     }
 
     // Get the Singleton instance
@@ -77,59 +70,49 @@ public class ApiKeyManager {
         return selectedMap;
     }
 
-    // Validate the API key using multiple threads (across all maps)
-    public boolean validateApiKey(String apiKey) throws InterruptedException, ExecutionException {
-        // List of tasks to check the API key in each map
-        List<Callable<Boolean>> tasks = Arrays.asList(
-                () -> apiKeyMap1.containsValue(apiKey),
-                () -> apiKeyMap2.containsValue(apiKey),
-                () -> apiKeyMap3.containsValue(apiKey),
-                () -> apiKeyMap4.containsValue(apiKey)
-        );
-
-        // Submit tasks for concurrent execution
-        List<Future<Boolean>> results = executorService.invokeAll(tasks);
-
-        // Wait for all tasks to complete and check the results
-        for (Future<Boolean> result : results) {
-            if (result.get()) {
-                return true;  // If any task found the key, return true
-            }
+    // Synchronously validate the API key by checking the maps directly
+    public boolean validateApiKey(String emailAddress, String apiKey) {
+        // Check all maps one by one for the API key
+        String fetchedApiKey = apiKeyMap1.get(emailAddress);
+        System.out.println("Search API key in all maps");
+        System.out.println(apiKeyMap1);
+        System.out.println(apiKeyMap2);
+        System.out.println(apiKeyMap3);
+        System.out.println(apiKeyMap4);
+        if (fetchedApiKey != null && fetchedApiKey.equals(apiKey)) {
+            return true;
         }
 
-        return false;  // If no task found the key, return false
+        fetchedApiKey = apiKeyMap2.get(emailAddress);
+        if (fetchedApiKey != null && fetchedApiKey.equals(apiKey)) {
+            return true;
+        }
+
+        fetchedApiKey = apiKeyMap3.get(emailAddress);
+        if (fetchedApiKey != null && fetchedApiKey.equals(apiKey)) {
+            return true;
+        }
+
+        fetchedApiKey = apiKeyMap4.get(emailAddress);
+        if (fetchedApiKey != null && fetchedApiKey.equals(apiKey)) {
+            return true;
+        }
+
+        return false;  // If the key is not found in any map
     }
 
-    public void invalidateApiKey(String userEmail) throws InterruptedException, ExecutionException {
-        // List of tasks to remove the key from each map
-        List<Callable<Void>> tasks = Arrays.asList(
-                () -> {
-                    apiKeyMap1.remove(userEmail);
-                    return null;
-                },
-                () -> {
-                    apiKeyMap2.remove(userEmail);
-                    return null;
-                },
-                () -> {
-                    apiKeyMap3.remove(userEmail);
-                    return null;
-                },
-                () -> {
-                    apiKeyMap4.remove(userEmail);
-                    return null;
-                }
-        );
-
-        // Submit tasks for concurrent execution
-        List<Future<Void>> results = executorService.invokeAll(tasks);
-
-        // Wait for all tasks to complete (in this case, no need to check result)
-        for (Future<Void> result : results) {
-            result.get();  // Ensure all tasks complete
-        }
+    // Synchronously invalidate the API key by removing it from all maps
+    public void invalidateApiKey(String userEmail) {
+        // Remove the API key from each map
+        apiKeyMap1.remove(userEmail);
+        apiKeyMap2.remove(userEmail);
+        apiKeyMap3.remove(userEmail);
+        apiKeyMap4.remove(userEmail);
 
         System.out.println("Removed API key from all maps");
+        System.out.println(apiKeyMap1);
+        System.out.println(apiKeyMap2);
+        System.out.println(apiKeyMap3);
+        System.out.println(apiKeyMap4);
     }
-
 }
