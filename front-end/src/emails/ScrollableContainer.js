@@ -1,20 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../style/Scrollablecontainer.css';
 import Email from './Card';
-import FilterList from './filter';
+
 import SearchBar from "./SearchBar";
+import SortList from './SortList';
+import FilterList from './FilterList';
 
 
-
-const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
+const ScrollableContainer = ({ API_KEY, Address, type}) => {
   const [items, setItems] = useState([]);
+  const sortMethod = useRef("PriorityHighToLow");
+  const filterMethod = useRef("All");
+  const substring = useRef("");
   const fetchEmails = async () => {
     try {
+      console.log(substring.current)
+      console.log(filterMethod.current)
       const url = new URL("http://localhost:8080/getEmail");
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("type", type);
-      url.searchParams.append("sort", sortMethod?.current.replace(/\s+/g,'') || "default"); 
-
+      url.searchParams.append("substring", substring?.current || ""); ;
+      url.searchParams.append("sort", sortMethod?.current.replace(/\s+/g,'') || "default");
+      url.searchParams.append("search", filterMethod?.current.replace(/\s+/g,'') || "default"); 
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -79,9 +86,12 @@ const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
         <div className='allSearchFilter'>
         <div className='search_filter_container'>
         
-        <FilterList sortMethod={sortMethod}/>
-        <FilterList sortMethod={sortMethod}/>
-        <SearchBar/>
+        <SortList sortMethod={sortMethod}/>
+        <FilterList FilterMethod={filterMethod}/>
+        <SearchBar substring={substring}/>
+        <div class="button-container">
+        <button class="cool-button" onClick={fetchEmails}>Apply</button>
+        </div>
       
       
       </div>

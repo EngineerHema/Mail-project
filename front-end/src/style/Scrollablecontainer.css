@@ -45,3 +45,33 @@
   padding-right: 10px;
   border-radius: 20px;
 }
+.button-container {
+  text-align: center;
+}
+
+.cool-button {
+  
+  background: linear-gradient(90deg, #00ff00, #03952e); /* Gradient button */
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: all 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Hover effect */
+.cool-button:hover {
+  transform: scale(1.1); /* Slightly enlarges */
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Active effect */
+.cool-button:active {
+  transform: scale(0.95); /* Press effect */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(90deg, #03952e, #00ff00);
+}
