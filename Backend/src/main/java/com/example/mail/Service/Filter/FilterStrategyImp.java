@@ -1,4 +1,4 @@
-package com.example.mail.Service;
+package com.example.mail.Service.Filter;
 
 import com.example.mail.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ public class FilterStrategyImp implements FilterStrategy {
 
     @Override
     public Filter<Email> setFilteringStrategy(String type) {
+
         switch (type.toLowerCase()) {
             case "sent":
                 return sentFilter;

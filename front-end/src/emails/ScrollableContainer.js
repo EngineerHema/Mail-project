@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../style/Scrollablecontainer.css';
 import Email from './Card';
 import FilterList from './filter';
-import SearchBar from "../SearchBar";
+import SearchBar from "./SearchBar";
+
 
 
 const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
@@ -12,9 +13,7 @@ const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
       const url = new URL("http://localhost:8080/getEmail");
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("type", type);
-      url.searchParams.append("sort", sortMethod?.current.replace(/\s+/g,'') || "default"); //timenewtoold,timeoldtonew,prioritylowtohigh
-      //priorityhightolow, CaSe doesnot matter
-
+      url.searchParams.append("sort", sortMethod?.current.replace(/\s+/g,'') || "default"); 
 
       const response = await fetch(url, {
         method: "GET",
@@ -77,9 +76,15 @@ const ScrollableContainer = ({ API_KEY, Address, type ,sortMethod}) => {
   return (
     <div className='page2'>
       <div className="scrollable-container">
+        <div className='allSearchFilter'>
         <div className='search_filter_container'>
+        
         <FilterList sortMethod={sortMethod}/>
-      <SearchBar/>
+        <FilterList sortMethod={sortMethod}/>
+        <SearchBar/>
+      
+      
+      </div>
       </div>
         {items.length === 0 ? (
           <div className="no-emails-message">

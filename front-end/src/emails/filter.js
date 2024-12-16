@@ -7,7 +7,6 @@ import "../style/filterlist.css"
 function FilterList({ sortMethod }) {
   const handleSelect = (method) => {
     sortMethod.current=method;
-    
     if(sortMethod?.current === null || sortMethod?.current === undefined){
     sortMethod.current="PriorityHighToLow";
     }
@@ -15,11 +14,8 @@ function FilterList({ sortMethod }) {
 
   return (
     <Navbar variant="dark" bg="dark" expand="lg" className='filter_list'>
-      <Container fluid>
-        <Navbar.Brand href="#home">Sort By :</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbar-dark-example" />
-        <Navbar.Collapse id="navbar-dark-example">
-          <Nav>
+      
+      
             <NavDropdown
               id="nav-dropdown-dark-example"
               title= {sortMethod?.current || "PriorityHighToLow"}
@@ -39,9 +35,9 @@ function FilterList({ sortMethod }) {
                 Priority low to high
               </NavDropdown.Item>
             </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
+            
+          
+    
     </Navbar>
   );
 }

@@ -92,7 +92,11 @@ public class UserActivity {
             @RequestHeader("Authorization") String authorization,
             @RequestParam("Address") String address,
             @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "sort", required = false) String sort) throws ExecutionException, InterruptedException {
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "search",required = false)String search,
+            @RequestParam(value = "substring",required = false)String substring)
+
+            throws ExecutionException, InterruptedException {
 
         String apiKey = extractApiKey(authorization);
         System.out.println("Key: " + apiKey);
@@ -102,7 +106,7 @@ public class UserActivity {
         }
 
         if (apiKeyManager.validateApiKey(address, apiKey)) {
-            List<Email> emails = emailService.returnEmails(address, type, sort);
+            List<Email> emails = emailService.returnEmails(address, type, sort,search,substring);
             return ResponseEntity.ok(emails);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
