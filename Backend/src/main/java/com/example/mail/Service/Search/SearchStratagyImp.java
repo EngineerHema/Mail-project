@@ -26,6 +26,7 @@ public class SearchStratagyImp implements SearchStratagy {
     }
    @Override
     public  Search<Email> setSearchingStrategy(String type){
+       System.out.println("kero is here"+type);
         switch (type.toLowerCase()) {
             case "attachment":
                 return searchAttachment;
@@ -34,10 +35,10 @@ public class SearchStratagyImp implements SearchStratagy {
             case "head":
                 return searchHead;
             case "receiver":
-                    return searchReceiver;
+                return searchReceiver;
             case "sender":
-                        return searchSender;
-            case "searchall":
+                return searchSender;
+            case "all":
                 return searchAll;
             default:
                 return searchAll ;

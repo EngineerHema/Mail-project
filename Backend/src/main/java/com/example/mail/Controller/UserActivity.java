@@ -95,7 +95,6 @@ public class UserActivity {
             @RequestParam(value = "sort", required = false) String sort,
             @RequestParam(value = "search",required = false)String search,
             @RequestParam(value = "substring",required = false)String substring)
-
             throws ExecutionException, InterruptedException {
 
         String apiKey = extractApiKey(authorization);
