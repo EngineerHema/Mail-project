@@ -5,13 +5,13 @@ import './style/Scrollablecontainer.css';
 
 
 
-function Inbox({ API_KEY, emailAddress, name ,sortMethod}) {
+function Inbox({ API_KEY, emailAddress, name}) {
     return (
      <div>
         <NavBar name={name}/>
         <div className="scrollable_flex">
         <SideBar/>
-        <ScrollableContainer API_KEY={API_KEY} Address={emailAddress} type={"inbox"} sortMethod={sortMethod}/>
+        <ScrollableContainer API_KEY={API_KEY} Address={emailAddress} type={"inbox"}/>
       </div>
      </div>
     );

@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import styles from "../style/SearchBar.module.css"; // Import CSS module
+import React, { useState, useRef } from "react";
+import styles from "../style/SearchBar.module.css"; 
 
-const SearchBox = ({ placeholder = "Search..." }) => {
+const SearchBox = ({ substring }) => {
   const [value, setValue] = useState("");
-
-  const handleClear = () => {
-    setValue("");
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    substring.current = e.target.value; 
+   
   };
 
   return (
@@ -13,11 +14,10 @@ const SearchBox = ({ placeholder = "Search..." }) => {
       <input
         type="text"
         value={value}
-        placeholder={placeholder}
-        onChange={(e) => setValue(e.target.value)}
+        placeholder={"Search..."}
+        onChange={handleChange}
         className={styles.input}
       />
-    
     </div>
   );
 };
