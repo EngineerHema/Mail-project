@@ -1,7 +1,7 @@
 
 .scrollable-container {
     height: calc(100vh - 70px); 
-    overflow-y: auto;
+    /* overflow-y: auto; */
     width: calc(200vh - 20px);
     padding: 20px;
     background-color: #000000;

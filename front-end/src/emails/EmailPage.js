@@ -1,7 +1,12 @@
 import React from "react";
-import "../style/Email.css"
+import { useLocation } from "react-router-dom";
+import "../style/Email.css";
 import { Card } from "react-bootstrap";
-const EmailPage = ({time,header,sender,body,attachments,receiver,color}) => {
+
+const EmailPage = () => {
+  const location = useLocation(); // Access state from Link
+  const { sender, header, body, color, receiver, time, attachments } = location.state || {}; // Destructure state
+
   const formatTime = (time) => {
     const date = new Date(time);
     return date.toLocaleString("en-US", {
@@ -15,8 +20,8 @@ const EmailPage = ({time,header,sender,body,attachments,receiver,color}) => {
   };
 
   return (
-    <div className="page" >
-        <Card className="container_email" border={color} style={{borderWidth: "3px"}}>
+    <div className="page">
+      <Card className="container_email" border={color} style={{ borderWidth: "2px" }}>
         <h1 className="subject">{header}</h1>
         <div className="details">
           <p>
@@ -36,25 +41,22 @@ const EmailPage = ({time,header,sender,body,attachments,receiver,color}) => {
         <div className="attachments">
           <h3>Attachments:</h3>
           {attachments && attachments.length > 0 ? (
-            <ul className="attachmentList">
-              {attachments.map((attachment, index) => (
-                <li key={index} className="attachmentItem">
-                  <a href={attachment.url} download={attachment.name} className="attachmentLink">
-                    📎 {attachment.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div className="attachments-section">
+              <ul className="attachments-list">
+                {attachments.map((file, index) => (
+                  <li key={index} className="attachment-item">
+                    <span className="attachment-link">{file.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : (
-            <p className="noAttachments">No attachments</p>
+            <p>No attachments available.</p>
           )}
         </div>
       </Card>
     </div>
   );
-  
 };
-
-
 
 export default EmailPage;

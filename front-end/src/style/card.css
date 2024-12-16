@@ -16,11 +16,13 @@
     width: 100%;
     color: #ffffff;
     transition: transform 0.3s ease;
-    width: 100%;
+
   }
   
   .email-card:hover {
     transform: translateY(-5px); /* Subtle lift effect */
+    border: #00ff00 1px solid;
+
   }
   
   /* Header of the card */
@@ -55,12 +57,14 @@
     font-size: 12px;
     color: #bbbbbb;
     margin-left: auto;
-    margin-right:
+    margin-right:1%;
   }
   
   /* Email body */
   .email-card-body {
     margin-top: 10px;
+    display: flex;
+    
   }
   
   .email-title {
@@ -102,3 +106,40 @@
     color: #00bbff; /* Light blue for from */
   }
   
+
+/* Attachments Section */
+.attachments-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 10px;
+}
+
+.attachments-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #bbbbbb;
+  margin-bottom: 5px;
+}
+
+.attachments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.attachment-item {
+  margin: 3px 0;
+}
+
+.attachment-link {
+  font-size: 12px;
+  color: #00bbff; /* Light blue for links */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.attachment-link:hover {
+  color: #00ff00; /* Neon green on hover */
+  text-decoration: underline;
+}
