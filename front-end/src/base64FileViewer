@@ -1,0 +1,20 @@
+// base64FileViewer.js
+export default function handleDownload(base64, fileName, fileType) {
+    const base64Data = base64.split(",")[1];
+    const binaryData = atob(base64Data);
+    const byteArray = new Uint8Array(binaryData.length);
+  
+    for (let i = 0; i < binaryData.length; i++) {
+      byteArray[i] = binaryData.charCodeAt(i);
+    }
+  
+    const blob = new Blob([byteArray], { type: fileType });
+    const fileURL = URL.createObjectURL(blob);
+  
+    const link = document.createElement("a");
+    link.href = fileURL;
+    link.download = fileName || "download";
+    link.click();
+    URL.revokeObjectURL(fileURL);
+  }
+  

@@ -9,6 +9,9 @@ import FilterList from './FilterList';
 
 const ScrollableContainer = ({ API_KEY, Address, type}) => {
   const [items, setItems] = useState([]);
+  const [checkedEmails, setCheckedEmails] = useState([]); // State to store checked email IDs
+
+
   const sortMethod = useRef("PriorityHighToLow");
   const filterMethod = useRef("All");
   const substring = useRef("");
@@ -78,6 +81,18 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
     fetchEmails();
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
+  const handleCheckboxToggle = (id, isChecked) => {
+
+    setCheckedEmails((prevCheckedEmails) =>
+      isChecked
+        ? [...prevCheckedEmails, id] // Add email ID if checked
+        : prevCheckedEmails.filter((emailId) => emailId !== id) // Remove email ID if unchecked
+    );
+  };
+
+  useEffect(() => {
+    console.log("Checked Emails Updated:", checkedEmails);
+  }, [checkedEmails]);
 
 
   return (
@@ -116,6 +131,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
               time={item.time}
               attachments={item.attachments}
               API_KEY={API_KEY}
+              onCheckboxToggle={handleCheckboxToggle} // Pass the handler to Email component
             />
           ))
         )}

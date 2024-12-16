@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 .SideBarAll {
-  width: 15%; /* Slightly wider for better design */
+  height: 100vh; /* Full viewport height */
+  width: 10%; /* Slightly wider for better design */
   background: linear-gradient(to bottom, #00ff0081 10%, #000000 );
   color: white;
   display: flex;
@@ -9,7 +10,11 @@
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow */
   font-family: 'Roboto', 'Segoe UI', sans-serif; /* Modern font */
-  min-height: 100vh; /* Full height */
+  left: 0; /* Align to the left */
+  display: flex;
+  flex-direction: column;
+
+
 }
 
 .nav-item {
