@@ -2,6 +2,8 @@ package com.example.mail.Service;
 
 import com.example.mail.DAO.JPAEmails;
 import com.example.mail.DAO.JPAUsers;
+import com.example.mail.Service.EmailFacade.EmailFacade;
+import com.example.mail.Service.EmailFacade.EmailFacadeImp;
 import com.example.mail.Service.Filter.Filter;
 import com.example.mail.Service.Filter.FilterStrategy;
 import com.example.mail.Service.Filter.FilterStrategyImp;
@@ -18,23 +20,23 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class EmailService {
 
     JPAUsers jpaUsers;
     JPAEmails jpaEmails;
-    private FilterStrategy filterStrategy;
-    private SortStratagy sortStratagy;
-    private SearchStratagy searchStratagy;
+
+    EmailFacade emailFacade;
+    private Map<String, List<Email>> emailCache;
 
     @Autowired
-    private EmailService(JPAUsers jpaUsers, JPAEmails jpaEmails, FilterStrategyImp filterStrategyImp, SortStratagyImp sortStratagyImp, SearchStratagyImp searchStratagyImp) {
+    private EmailService(JPAUsers jpaUsers, JPAEmails jpaEmails, EmailFacadeImp emailFacadeImp) {
         this.jpaUsers = jpaUsers;
         this.jpaEmails = jpaEmails;
-        this.filterStrategy = filterStrategyImp;
-        this.sortStratagy = sortStratagyImp;
-        this.searchStratagy = searchStratagyImp;
+        this.emailFacade = emailFacadeImp;
+        emailCache = new ConcurrentHashMap<>();
 
 
     }
@@ -48,12 +50,13 @@ public class EmailService {
             email.setTimeStamp(LocalDateTime.now());
             email.setType("sent");
             sender.get().addEmail(email);
+            sender.get().setSentObserver(true);
             jpaUsers.save(sender.get());
 
             email.setType("inbox");
             receiver.get().addEmail(email);
+            receiver.get().setInboxObserver(true);
             jpaUsers.save(receiver.get());
-
 
 
             return true;
@@ -65,7 +68,7 @@ public class EmailService {
         try {
             Optional<Email> email = jpaEmails.findById(Integer.parseInt(id));
             User emailOwner = email.get().getUser();
-
+            emailOwner.setDeleteObserver(true);
             if (email.isPresent()){
                 if (email.get().getType().equals("trash")){
                     jpaEmails.delete(email.get());
@@ -74,6 +77,7 @@ public class EmailService {
                     jpaEmails.save(email.get());
                 }
             }
+            jpaUsers.save(emailOwner);
             return true;
         }catch (Error e){
             System.out.println("At delete: "+e);
@@ -86,21 +90,45 @@ public class EmailService {
         try {
 
             Optional<User> user = jpaUsers.findByEmailAddress(Address);
+            List<Email> emails;
 
+            switch (type){
+                case "inbox":
+                    if (user.get().isInboxObserver()){
+                        emailCache.put(Address+type, user.get().getEmails());
+                        user.get().setInboxObserver(false);
+                    }
+                    break;
 
+                case "sent":
+                    if (user.get().isSentObserver()){
+                        emailCache.put(Address+type, user.get().getEmails());
+                        user.get().setSentObserver(false);
+                    }
+                    break;
 
-            List<Email> emails = user.get().getEmails();
-            Filter<Email> filter = filterStrategy.setFilteringStrategy(type);
-            Sort<Email> sortingMethod = sortStratagy.setSortingStrategy(sort);
-            Search<Email> searchingMethod = searchStratagy.setSearchingStrategy(search);
-            emails = filter.applyFilter(emails);
-            emails = sortingMethod.applySort(emails);
-            if (!substring.equals("")&&!substring.equals(null)&&substring.length()>0){
-               emails = searchingMethod.applySearch(emails, substring);
+                case "trash":
+                    if (user.get().isDeleteObserver()){
+                        emailCache.put(Address+type, user.get().getEmails());
+                        user.get().setDeleteObserver(false);
+                    }
+                    break;
+
+                default:
+                    break;
+
             }
-            System.out.println(emails);
-            System.out.println("substring is" + substring);
-            System.out.println("this is the emails");
+            emails = emailCache.getOrDefault(Address+type,null);
+
+
+            if (emails!=null) {
+                emails = emailFacade.modifyEmail(emails, type, sort, search, substring);
+                System.out.println(emails);
+                System.out.println("substring is" + substring);
+                System.out.println("this is the emails");
+            }
+            jpaUsers.save(user.get());
+
             return emails;
         }
 

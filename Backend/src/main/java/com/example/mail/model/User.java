@@ -1,6 +1,7 @@
 package com.example.mail.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,6 +42,14 @@ public class User {
 
 
 
+    @Column(name = "inbox_observer")
+    private boolean inboxObserver;
+
+    @Column(name = "sent_observer")
+    private boolean sentObserver;
+
+    @Column(name = "delete_observer")
+    private boolean deleteObserver;
 
 
     // Getters and Setters
@@ -121,5 +130,29 @@ public class User {
         this.password = password;
     }
 
+
+    public boolean isInboxObserver() {
+        return inboxObserver;
+    }
+
+    public void setInboxObserver(boolean inboxObserver) {
+        this.inboxObserver = inboxObserver;
+    }
+
+    public boolean isSentObserver() {
+        return sentObserver;
+    }
+
+    public void setSentObserver(boolean sentObserver) {
+        this.sentObserver = sentObserver;
+    }
+
+    public boolean isDeleteObserver() {
+        return deleteObserver;
+    }
+
+    public void setDeleteObserver(boolean deleteObserver) {
+        this.deleteObserver = deleteObserver;
+    }
 
 }
