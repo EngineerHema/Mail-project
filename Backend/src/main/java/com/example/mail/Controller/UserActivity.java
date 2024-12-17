@@ -119,7 +119,7 @@ public class UserActivity {
     public ResponseEntity<?> deleteEmail(
             @RequestHeader("Authorization") String authorization,
             @RequestParam("Address") String address,
-            @RequestParam(value = "id", required = true) String id) throws ExecutionException, InterruptedException {
+            @RequestParam(value = "id", required = true) List<String> ids) {
 
         String apiKey = extractApiKey(authorization);
         System.out.println("Key: " + apiKey);
@@ -129,13 +129,25 @@ public class UserActivity {
         }
 
         if (apiKeyManager.validateApiKey(address, apiKey)) {
-            if (emailService.deleteEmail(id)) return ResponseEntity.ok("Email is deleted!");
-            else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email not found!");
+            boolean allDeleted = true;
 
+            for (String id : ids) {
+                boolean deleted = emailService.deleteEmail(id);
+                if (!deleted) {
+                    allDeleted = false;
+                }
+            }
+
+            if (allDeleted) {
+                return ResponseEntity.ok("Emails deleted successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One or more emails not found!");
+            }
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key!");
         }
     }
+
 
     @PostMapping("/contacts")
     public ResponseEntity<String> saveContact(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {

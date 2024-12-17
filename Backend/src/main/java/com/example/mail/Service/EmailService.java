@@ -71,8 +71,19 @@ public class EmailService {
             emailOwner.setDeleteObserver(true);
             if (email.isPresent()){
                 if (email.get().getType().equals("trash")){
+                    emailOwner.setDeleteObserver(true);
                     jpaEmails.delete(email.get());
+                }
+                else if (email.get().getType().equals("inbox")){
+                    email.get().setType("trash");
+                    emailOwner.setInboxObserver(true);
+                    jpaEmails.save(email.get());
+                }else if (email.get().getType().equals("sent")){
+                    email.get().setType("trash");
+                    emailOwner.setSentObserver(true);
+                    jpaEmails.save(email.get());
                 }else {
+                    emailOwner.setDeleteObserver(true);
                     email.get().setType("trash");
                     jpaEmails.save(email.get());
                 }
