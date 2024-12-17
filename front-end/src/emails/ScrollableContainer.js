@@ -5,7 +5,6 @@ import SearchBar from "./SearchBar";
 import SortList from './SortList';
 import FilterList from './FilterList';
 
-
 const ScrollableContainer = ({ API_KEY, Address, type}) => {
 
   const [items, setItems] = useState([]);
@@ -13,6 +12,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
   const sortMethod = useRef("PriorityHighToLow");
   const filterMethod = useRef("All");
   const substring = useRef("");
+
   const fetchEmails = async () => {
     try {
       console.log(substring.current)
@@ -74,6 +74,27 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
     }
   };
 
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      const url = new URL(`http://localhost:8080/deleteEmail`);
+      url.searchParams.append("Address", Address.current);
+      url.searchParams.append("id", checkedEmails);
+      console.log(Address.current,"hamdooooon", checkedEmails);
+
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${API_KEY.current}` },
+      });
+
+      if (response.ok) console.log("Email deleted successfully");
+      else console.error("Failed to delete email");
+    } catch (error) {
+      console.error("Error deleting email:", error);
+    }
+  };
+
   // Fetch emails on component mount
   useEffect(() => {
     fetchEmails();
@@ -98,16 +119,17 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       <div className="scrollable-container">
         <div className='allSearchFilter'>
         <div className='search_filter_container'>
-        
         <SortList sortMethod={sortMethod}/>
         <FilterList FilterMethod={filterMethod}/>
         <SearchBar substring={substring}/>
         <div class="button-container">
         <button class="cool-button" onClick={fetchEmails}>Apply</button>
         </div>
+      </div>
+      </div>
+    
+      <button class="delete-button" onClick={handleDelete}>Delete</button>
 
-      </div>
-      </div>
         {items.length === 0 ? (
           <div className="no-emails-message">
             No Emails

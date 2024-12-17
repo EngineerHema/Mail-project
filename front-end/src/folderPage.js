@@ -10,8 +10,7 @@ function FolderPage({ API_KEY, emailAddress, name}) {
     const location = useLocation();
     const {folder} = location.state || {};
     
-    console.log("Zzzzzz", folder);
-    return (
+        return (
      <div>
         <NavBar name={name}/>
         <div className="scrollable_flex">
