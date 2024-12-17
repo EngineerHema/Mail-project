@@ -13,7 +13,7 @@ function Inbox({ API_KEY, emailAddress, name }) {
         <div className="scrollable_flex">
         <SideBar/>
         <div className="contacts_container">
-        <ContactService/>
+        <ContactService API_KEY={API_KEY} emailAddress={emailAddress}/>
         </div>
       </div>
 
