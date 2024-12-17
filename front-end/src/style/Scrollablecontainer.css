@@ -29,6 +29,7 @@
     
 }
 
+
 .allSearchFilter {
   display: flex;
   justify-content: center; /* Center horizontally */
@@ -44,6 +45,7 @@
   padding: 5px;
   padding-right: 10px;
   border-radius: 20px;
+  z-index: 999999999;
 }
 .button-container {
   text-align: center;

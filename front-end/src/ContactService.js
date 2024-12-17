@@ -1,22 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ContactCard from "./ContactCard";
 import './style/Contacts.css';
 
-function App() {
+function App({API_KEY, emailAddress}) {
   const [contacts, setContacts] = useState([]);
   const [newContact, setNewContact] = useState({ name: "", emails: [""] });
   const [editingIndex, setEditingIndex] = useState(null);
 
   // Helper function to send data to the backend
   const sendContactToBackend = (method, contact, id = null) => {
-    const url = id ? `http://localhost:8080/contacts/${id}` : "http://localhost:8080/contacts";
-    
+    console.log(method);
+    const url = id!==null 
+    ? method !== "DELETE" 
+      ? `http://localhost:8080/contacts/${id}`
+      : `http://localhost:8080/contacts/${id}/${emailAddress.current}`
+    : "http://localhost:8080/contacts";  // No ID provided, base URL
+  
+    console.log(url)
     fetch(url, {
       method: method,
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${API_KEY.current}`,
       },
-      body: JSON.stringify(contact), // Send contact as JSON
+      body: method !== "DELETE" ? JSON.stringify({
+        emailAddress: emailAddress.current,
+        ...contact,
+      }) : undefined,
+      
     })
     .then(response => response.json())
     .then(data => {
@@ -48,7 +59,7 @@ function App() {
       const updatedContacts = [...contacts];
       updatedContacts[editingIndex] = newContact;
       setContacts(updatedContacts);
-      sendContactToBackend("PUT", newContact, contacts[editingIndex].id); // PUT request for update
+      sendContactToBackend("PUT", newContact, editingIndex); // PUT request for update
     } else {
       // Add new contact
       setContacts([...contacts, newContact]);
@@ -62,9 +73,9 @@ function App() {
 
   // Handle deleting a contact
   const handleDeleteContact = (index) => {
-    const contactId = contacts[index].id;
+    console.log("delete" + index);
+    sendContactToBackend("DELETE", contacts[index], index);
     setContacts(contacts.filter((_, i) => i !== index));
-    sendContactToBackend("DELETE", contacts[index], contactId);
   };
 
   // Handle editing a contact
@@ -90,6 +101,32 @@ function App() {
     const updatedEmails = newContact.emails.filter((_, i) => i !== index);
     setNewContact({ ...newContact, emails: updatedEmails });
   };
+
+
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const url = `http://localhost:8080/contacts/${emailAddress.current}`;
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            "Authorization": `Bearer ${API_KEY.current}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch contacts");
+        }
+        const data = await response.json();
+        setContacts(data); // Set the contacts from the response
+        console.log("Fetched contacts:", data);
+      } catch (error) {
+        console.error("Error fetching contacts:", error);
+      }
+    };
+
+    fetchContacts();
+  }, []);
 
   return (
     <div className="ContactServiceContainer">

@@ -2,7 +2,9 @@ package com.example.mail.Controller;
 
 import com.example.mail.Service.EmailService;
 import com.example.mail.Security.ApiKeyManager;
+import com.example.mail.Service.UserService;
 import com.example.mail.model.Attachment;
+import com.example.mail.model.Contact;
 import com.example.mail.model.Email;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -24,6 +23,9 @@ public class UserActivity {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/sendEmail")
     public ResponseEntity<String> sendEmail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
@@ -93,8 +95,8 @@ public class UserActivity {
             @RequestParam("Address") String address,
             @RequestParam(value = "type", required = false) String type,
             @RequestParam(value = "sort", required = false) String sort,
-            @RequestParam(value = "search",required = false)String search,
-            @RequestParam(value = "substring",required = false)String substring)
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "substring", required = false) String substring)
             throws ExecutionException, InterruptedException {
 
         String apiKey = extractApiKey(authorization);
@@ -105,7 +107,7 @@ public class UserActivity {
         }
 
         if (apiKeyManager.validateApiKey(address, apiKey)) {
-            List<Email> emails = emailService.returnEmails(address, type, sort,search,substring);
+            List<Email> emails = emailService.returnEmails(address, type, sort, search, substring);
             return ResponseEntity.ok(emails);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
@@ -133,6 +135,120 @@ public class UserActivity {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
+    }
+
+    @PostMapping("/contacts")
+    public ResponseEntity<String> saveContact(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
+        // Extract API key from the Authorization header
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        // Check if the required parameters are present
+        if (apiKey == null || requestBody.get("emailAddress") == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or email.");
+        }
+
+        // Validate the API key
+        String emailAddress = requestBody.get("emailAddress").toString();
+        if (!apiKeyManager.validateApiKey(emailAddress, apiKey)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+        }
+
+        Contact contact = new Contact();
+        contact.setName(requestBody.get("name").toString());
+        contact.setEmails((List<String>) requestBody.get("emails"));
+
+        if (userService.saveContact(emailAddress, contact)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Contact saved.");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to save contact.");
+
+
+    }
+
+    @PutMapping("/contacts/{id}")
+    public ResponseEntity<String> deleteContact(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable String id,
+            @RequestBody Map<String, Object> requestBody) {
+
+        // Extract API key from the Authorization header
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        // Check if the required parameters are present
+        if (apiKey == null || requestBody.get("emailAddress") == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or email.");
+        }
+
+        // Validate the API key
+        String emailAddress = requestBody.get("emailAddress").toString();
+        if (!apiKeyManager.validateApiKey(emailAddress, apiKey)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+        }
+
+        Contact contact = new Contact();
+        contact.setName(requestBody.get("name").toString());
+        contact.setEmails((List<String>) requestBody.get("emails"));
+
+        if (userService.modifyContact(emailAddress, contact, Integer.parseInt(id) )) {
+            return ResponseEntity.status(HttpStatus.OK).body("Contact modified.");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to modify contact.");
+    }
+
+
+    @DeleteMapping("/contacts/{id}/{emailAddress}")
+    public ResponseEntity<String> deleteContact(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable String id,
+            @PathVariable String emailAddress) {
+
+        // Extract API key from the Authorization header
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        // Check if the required parameters are present
+        if (apiKey == null || emailAddress == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or email.");
+        }
+
+        // Validate the API key
+        if (!apiKeyManager.validateApiKey(emailAddress, apiKey)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+        }
+
+
+        if (userService.deleteContact(emailAddress, Integer.parseInt(id))) {
+            return ResponseEntity.status(HttpStatus.OK).body("Contact Deleted.");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to deltet contact.");
+
+
+    }
+
+    @GetMapping("contacts/{emailAddress}")
+    public ResponseEntity<?> getContacts(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable String emailAddress) {
+
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        // Check if the required parameters are present
+        if (apiKey == null || emailAddress == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or email.");
+        }
+
+        // Validate the API key
+        if (!apiKeyManager.validateApiKey(emailAddress, apiKey)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getContacts(emailAddress));
+
     }
 
     // Extract API Key from Authorization Header

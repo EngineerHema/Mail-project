@@ -19,33 +19,55 @@ const EmailPage = () => {
     });
   };
 
+
+  function handleDownload(base64, fileName, fileType) {
+    const base64Data = base64.split(",")[1];
+    const binaryData = atob(base64Data);
+    const byteArray = new Uint8Array(binaryData.length);
+  
+    for (let i = 0; i < binaryData.length; i++) {
+      byteArray[i] = binaryData.charCodeAt(i);
+    }
+  
+    const blob = new Blob([byteArray], { type: fileType });
+    const fileURL = URL.createObjectURL(blob);
+  
+    const link = document.createElement("a");
+    link.href = fileURL;
+    link.download = fileName || "download";
+    link.click();
+    URL.revokeObjectURL(fileURL);
+  }
+
   return (
     <div className="page">
       <Card className="container_email" border={color} style={{ borderWidth: "2px" }}>
         <h1 className="subject">{header}</h1>
         <div className="details">
           <p>
-            <strong>Sender:</strong> <span className="info">{sender}</span>
+            <h5>Sender:</h5> <span className="info">{sender}</span>
           </p>
           <p>
-            <strong>Receiver:</strong> <span className="info">{receiver}</span>
+            <h5>Receiver:</h5> <span className="info">{receiver}</span>
           </p>
           <p>
-            <strong>Time:</strong> <span className="info">{formatTime(time)}</span>
+            <h5>Time:</h5> <span className="info">{formatTime(time)}</span>
           </p>
         </div>
         <div className="body_email">
-          <h3>Body:</h3>
+          <h4>Body:</h4>
           <p className="bodyText">{body}</p>
         </div>
         <div className="attachments">
-          <h3>Attachments:</h3>
+          <h4>Attachments:</h4>
           {attachments && attachments.length > 0 ? (
             <div className="attachments-section">
               <ul className="attachments-list">
                 {attachments.map((file, index) => (
                   <li key={index} className="attachment-item">
-                    <span className="attachment-link">{file.name}</span>
+                    <span  className="attachment-link" onClick={() => handleDownload(file.content, file.name, file.type)}>
+                      {file.name}
+                      </span>
                   </li>
                 ))}
               </ul>

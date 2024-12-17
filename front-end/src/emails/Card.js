@@ -109,13 +109,15 @@ function handleDownload(base64, fileName, fileType) {
             <span className={type === "sent" ? "for" : "from"}>{head}</span>
           </Link>
           <CoolDate time={time} />
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={handleCheckboxChange}
-            title="Select this email"
-            style={{ marginLeft: "10px" , marginRight: "10px"}} // Add some space
-          />
+          <label className="custom-checkbox">
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+              title="Select this email"
+            />
+            <span className="checkmark"></span>
+          </label>
           <button className="delete-button" onClick={handleDelete}>
             Delete
           </button>
@@ -128,21 +130,7 @@ function handleDownload(base64, fileName, fileType) {
           </div>
           {/* Attachments Section */}
           {attachments && attachments.length > 0 && (
-            <div className="attachments-section">
-              <p className="attachments-title">Attachments:</p>
-              <ul className="attachments-list">
-                {attachments.map((file, index) => (
-                  <li key={index} className="attachment-item">
-                    <span
-                      className="attachment-link"
-                      onClick={() => handleDownload(file.content, file.name, file.type)}
-                    >
-                      {file.name}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+              <p className="card-attachment">{attachments.length} Attachment (s)</p>
           )}
         </div>
       </div>

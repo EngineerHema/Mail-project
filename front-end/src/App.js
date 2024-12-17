@@ -9,6 +9,8 @@ import Trash from './trash';
 import Contacts from './contacts';
 import Sent from './sent';
 import OpenEmail from './openEmail';
+import Folders from './Folders';
+import FolderPage from './folderPage';
 
 
 
@@ -40,6 +42,10 @@ function App() {
         <Route path="/openEmail" element={<OpenEmail API_KEY = {API_KEY} emailAddress={emailAddress} name={name} />} />
 
         <Route path="/myContacts" element={<Contacts API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+
+        <Route path="/Folders" element={<Folders API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+        <Route path="/folderPage" element={<FolderPage API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+
 
       </Routes>
     </Router>

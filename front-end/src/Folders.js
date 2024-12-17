@@ -1,19 +1,18 @@
 import SideBar from "./Bars/SideBar";
 import NavBar from "./Bars/NavBar";
-import ContactService from "./ContactService"
-import './style/Contacts.css';
+import FolderManager from "./folderManager";
 
 
 
 
-function Inbox({ API_KEY, emailAddress, name }) {
+function Folders({ API_KEY, emailAddress, name }) {
     return (
-     <div>
+        <div>
         <NavBar name={name}/>
         <div className="scrollable_flex">
         <SideBar/>
         <div className="contacts_container">
-        <ContactService API_KEY={API_KEY} emailAddress={emailAddress}/>
+        <FolderManager/>
         </div>
       </div>
 
@@ -21,4 +20,4 @@ function Inbox({ API_KEY, emailAddress, name }) {
     );
   }
   
-  export default Inbox;
+  export default Folders;
