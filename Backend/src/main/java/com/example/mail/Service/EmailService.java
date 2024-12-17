@@ -54,6 +54,8 @@ public class EmailService {
             receiver.get().addEmail(email);
             jpaUsers.save(receiver.get());
 
+
+
             return true;
         } else {
             return false;
@@ -62,6 +64,8 @@ public class EmailService {
     public boolean deleteEmail(String id) {
         try {
             Optional<Email> email = jpaEmails.findById(Integer.parseInt(id));
+            User emailOwner = email.get().getUser();
+
             if (email.isPresent()){
                 if (email.get().getType().equals("trash")){
                     jpaEmails.delete(email.get());
@@ -81,8 +85,11 @@ public class EmailService {
     public List<Email> returnEmails(String Address, String type, String sort,String search, String substring) {
         try {
 
-            List<Email> emails = jpaUsers.findByEmailAddress(Address).get().getEmails();
-            System.out.println(emails);
+            Optional<User> user = jpaUsers.findByEmailAddress(Address);
+
+
+
+            List<Email> emails = user.get().getEmails();
             Filter<Email> filter = filterStrategy.setFilteringStrategy(type);
             Sort<Email> sortingMethod = sortStratagy.setSortingStrategy(sort);
             Search<Email> searchingMethod = searchStratagy.setSearchingStrategy(search);
