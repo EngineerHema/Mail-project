@@ -56,44 +56,7 @@ function Email({
 
 
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    try {
-      const url = new URL(`http://localhost:8080/deleteEmail`);
-      url.searchParams.append("Address", Address.current);
-      url.searchParams.append("id", id);
 
-      const response = await fetch(url, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${API_KEY.current}` },
-      });
-
-      if (response.ok) console.log("Email deleted successfully");
-      else console.error("Failed to delete email");
-    } catch (error) {
-      console.error("Error deleting email:", error);
-    }
-  };
-
-
-function handleDownload(base64, fileName, fileType) {
-    const base64Data = base64.split(",")[1];
-    const binaryData = atob(base64Data);
-    const byteArray = new Uint8Array(binaryData.length);
-  
-    for (let i = 0; i < binaryData.length; i++) {
-      byteArray[i] = binaryData.charCodeAt(i);
-    }
-  
-    const blob = new Blob([byteArray], { type: fileType });
-    const fileURL = URL.createObjectURL(blob);
-  
-    const link = document.createElement("a");
-    link.href = fileURL;
-    link.download = fileName || "download";
-    link.click();
-    URL.revokeObjectURL(fileURL);
-  }
   
 
   return (
@@ -118,9 +81,6 @@ function handleDownload(base64, fileName, fileType) {
             />
             <span className="checkmark"></span>
           </label>
-          <button className="delete-button" onClick={handleDelete}>
-            Delete
-          </button>
         </div>
 
         <div className="email-card-body">
