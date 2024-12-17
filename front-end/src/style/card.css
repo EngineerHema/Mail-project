@@ -16,13 +16,12 @@
     width: 100%;
     color: #ffffff;
     transition: transform 0.3s ease;
-
+    position: relative; /* Added for absolute positioning of attachments */
   }
   
   .email-card:hover {
     transform: translateY(-5px); /* Subtle lift effect */
     border: #00ff00 1px solid;
-
   }
   
   /* Header of the card */
@@ -108,38 +107,78 @@
   
 
 /* Attachments Section */
-.attachments-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-top: 10px;
+
+
+.card-attachment {
+  position: absolute; /* Absolute positioning within .email-card */
+  bottom: 10px; /* Distance from the bottom of the card */
+  right: 15px; /* Distance from the right edge of the card */
+  font-size: 12px; /* Smaller font size */
+  color: #cccccc; /* Light gray color */
+  background-color: #2c2c2c; /* Slightly lighter background for contrast */
+  padding: 5px 8px; /* Padding around the text */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); /* Soft shadow for emphasis */
+}
+/* Custom Checkbox Container */
+.custom-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 18px; /* Size of the checkbox */
+  height: 18px;
+  margin-left: 3px; /* Spacing to the left */
+  margin-right: 10px; /* Spacing to the right */
+  cursor: pointer; /* Pointer cursor for interaction */
 }
 
-.attachments-title {
-  font-size: 12px;
-  font-weight: 500;
-  color: #bbbbbb;
-  margin-bottom: 5px;
+/* Hide the default checkbox */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0; /* Make the default checkbox invisible */
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
-.attachments-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* Custom Checkbox Design */
+.custom-checkbox .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #333; /* Dark background for the checkbox */
+  border: 2px solid #555; /* Border color */
+  border-radius: 4px; /* Slightly rounded corners for a modern look */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.attachment-item {
-  margin: 3px 0;
+/* On hover - make the border glow */
+.custom-checkbox:hover .checkmark {
+  border-color: #00ff00; /* Neon green border on hover */
 }
 
-.attachment-link {
-  font-size: 12px;
-  color: #00bbff; /* Light blue for links */
-  text-decoration: none;
-  transition: color 0.3s ease;
+/* Custom Checkbox Checked State */
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #00ff00; /* Neon green fill when checked */
+  border-color: #00ff00; /* Border matches background */
 }
 
-.attachment-link:hover {
-  color: #00ff00; /* Neon green on hover */
-  text-decoration: underline;
+/* Add a checkmark symbol */
+.custom-checkbox .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none; /* Initially hidden */
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #000; /* Black checkmark */
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg); /* Draw the checkmark */
+}
+
+/* Show the checkmark when checked */
+.custom-checkbox input:checked ~ .checkmark::after {
+  display: block;
 }

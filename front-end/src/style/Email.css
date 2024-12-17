@@ -22,18 +22,24 @@
 .subject {
     font-size: 2rem;  /* Larger font size for the subject */
     margin-bottom: 30px;  /* Increased margin between subject and details */
-    color: #2c3e50;
+    color: #cacaca;
     font-weight: bold;
 }
 
 .details {
-    border-bottom: 1px solid #009000;
+    border-bottom: 1px solid #00ff00;
     padding-bottom: 15px;  /* More padding to space out the details */
     margin-bottom: 30px;  /* Increased margin to separate details from body */
 }
+h4{
+    color: #cacaca;
+}
+h5{
+    color: #cacaca;
+}
 
 .info {
-    color: #c4c4c4;
+    color: #333;
     font-size: 1.2rem;  /* Slightly larger font size for info */
 }
 
@@ -45,6 +51,7 @@
     line-height: 1.8;  /* Larger line height for better readability */
     white-space: pre-line;
     font-size: 1.1rem;  /* Slightly larger font size for body text */
+    color: #333;
 }
 
 .attachments {
@@ -52,19 +59,30 @@
 }
 
 .attachmentList {
-    list-style: none;
-    padding: 0;
+    list-style: none; /* Remove bullets */
+    padding: 0; /* Ensure there's no additional padding */
+    margin: 0; /* Remove default list margin */
 }
 
 .attachmentItem {
-    margin-bottom: 15px;  /* Increased space between attachment items */
+    margin-top: 15px; /* Adjusted margin for more space between items */
+    margin-bottom: 15px; /* Optional: Add margin below items for symmetry */
 }
 
-.attachmentLink {
-    color: #3498db;
+
+.attachment-link {
+    color: #ffffff;
     text-decoration: none;
-    font-weight: 600;  /* More emphasis on the links */
-    font-size: 1.1rem;  /* Slightly larger font size for links */
+    font-weight: 100;
+    font-size:small;  /* More emphasis on the links */
+    cursor: pointer;
+    text-decoration:underline;
+    border-radius: 5px;
+    padding: 2px;
+    background-color: #2c2c2c; /* Slightly lighter background for contrast */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); /* Soft shadow for emphasis */
+
+
 }
 
 .noAttachments {

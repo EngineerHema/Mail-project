@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../style/Scrollablecontainer.css';
 import Email from './Card';
-
 import SearchBar from "./SearchBar";
 import SortList from './SortList';
 import FilterList from './FilterList';
 
 
 const ScrollableContainer = ({ API_KEY, Address, type}) => {
+
   const [items, setItems] = useState([]);
   const [checkedEmails, setCheckedEmails] = useState([]); // State to store checked email IDs
-
-
   const sortMethod = useRef("PriorityHighToLow");
   const filterMethod = useRef("All");
   const substring = useRef("");
@@ -107,8 +105,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
         <div class="button-container">
         <button class="cool-button" onClick={fetchEmails}>Apply</button>
         </div>
-      
-      
+
       </div>
       </div>
         {items.length === 0 ? (
