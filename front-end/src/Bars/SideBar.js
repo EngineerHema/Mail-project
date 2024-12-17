@@ -37,6 +37,13 @@ function SideBar() {
         >
           Compose Email
         </NavLink>
+
+        <NavLink
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          to="/Folders"
+        >
+          Folders
+        </NavLink>
       </Nav>
     </div>
   );
