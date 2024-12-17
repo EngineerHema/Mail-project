@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
-import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate for redirection
+import { Link, useNavigate } from 'react-router-dom'; // For navigation
 import axios from 'axios'; // Import axios
 import "./style/formSignup.css";
-
 
 function SignUpForm() {
   const [firstName, setFirstName] = useState('');
@@ -15,8 +10,8 @@ function SignUpForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [errors, setErrors] = useState({}); // State to track errors
-  const navigate = useNavigate(); // For navigation after successful signup
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate(); 
 
   // Handle changes for each input field
   const handleFirstNameChange = (e) => {
@@ -42,7 +37,7 @@ function SignUpForm() {
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission behavior (page reload)
 
     // Validation
     const newErrors = {};
@@ -64,10 +59,9 @@ function SignUpForm() {
       emailAddress,
       password,
     };
+    console.log(userData)
 
     try {
-      console.log(userData);
-
       const response = await axios.post('http://localhost:8080/register', userData, {
         headers: {
           'Content-Type': 'application/json',
@@ -75,9 +69,8 @@ function SignUpForm() {
       });
 
       if (response.status === 201) {
-        // Redirect to login page on successful signup
-        alert(response.data);
-        navigate('/signIn'); // Redirect to the sign-in page
+        alert(response.data); 
+        navigate('/signIn');
       } else {
         alert('Error during sign-up. Please try again.');
       }
@@ -88,79 +81,81 @@ function SignUpForm() {
   };
 
   return (
-    <div className="all">
-      <div className="form_section_up">
-        <Form onSubmit={handleSubmit}>
-          <Form.Group>
-            <Row>
-              <Col>
-                <Form.Label  className='lable'>First Name</Form.Label>
-                <Form.Control
-                  placeholder="First name"
+    <section>
+      {Array.from({ length: 200 }).map((_, index) => (
+        <span key={index}></span>
+      ))}
+      <div className="signin">
+        <div className="content">
+          <h2>Sign UP</h2>
+          <form className="form" onSubmit={handleSubmit}> {/* Attach onSubmit here */}
+            <div className="inputRow">
+              <div className="inputBox">
+                <input
+                  type="text"
                   value={firstName}
                   onChange={handleFirstNameChange}
-                  className={errors.firstName ? 'error' : ''}
+                  required
                 />
-              </Col>
-              <Col>
-                <Form.Label  className='lable'>Last Name</Form.Label>
-                <Form.Control
-                  placeholder="Last name"
+                <i>First Name</i>
+              </div>
+              <div className="inputBox">
+                <input
+                  type="text"
                   value={lastName}
                   onChange={handleLastNameChange}
-                  className={errors.lastName ? 'error' : ''}
+                  required
                 />
-              </Col>
-            </Row>
-          </Form.Group>
+                <i>Last Name</i>
+              </div>
+            </div>
 
-          <p></p>
+            {/* Email input */}
+            <div className="inputBox">
+              <input
+                type="email"
+                value={emailAddress}
+                onChange={handleEmailChange}
+                required
+              />
+              <i>Email</i>
+            </div>
 
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label  className='lable'>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={emailAddress}
-              onChange={handleEmailChange}
-              className={errors.emailAddress ? 'error' : ''}
-            />
-          </Form.Group>
+            {/* Password input */}
+            <div className="inputBox">
+              <input
+                type="password"
+                value={password}
+                onChange={handlePasswordChange}
+                required
+              />
+              <i>Password</i>
+            </div>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label  className='lable'>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
-              className={errors.password ? 'error' : ''}
-            />
-          </Form.Group>
+            {/* Confirm Password input */}
+            <div className="inputBox">
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                required
+              />
+              <i>Confirm Password</i>
+            </div>
 
-          <Form.Group className="mb-3" controlId="formConfirmPassword">
-            <Form.Label  className='lable'>Confirm Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              className={errors.confirmPassword ? 'error' : ''}
-            />
-          </Form.Group>
+            {/* Link to SignIn */}
+            <div className="links">
+              <Link to="/signIn">Sign In</Link>
+            </div>
 
-          <Form.Group>
-            <Link to="/signIn" className="already_have">
-              Already have an account?
-            </Link>
-          </Form.Group>
-
-          <Button variant="primary" type="submit" className="button-submit">
-            Submit
-          </Button>
-        </Form>
+            {/* Submit button */}
+            <div className="inputBox">
+              <input type="submit" />
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -14,6 +14,14 @@ public class SearchAttachment implements Search<Email>{
                 .collect(Collectors.toList());
     }
     private boolean emailContainsSubstring(Email email, String substring) {
-        return email.getAttachments() != null && email.getSubject().toLowerCase().contains(substring.toLowerCase());
+        boolean check = false ;
+
+        for (int i = 0; i < email.getAttachments().size(); i++) {
+            String name = email.getAttachments().get(i).getName().toLowerCase();
+          if(name.contains(substring.toLowerCase())){
+              check = true;
+          }
+        }
+        return check;
     }
 }
