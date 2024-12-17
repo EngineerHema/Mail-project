@@ -2,11 +2,14 @@ package com.example.mail.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class User {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-generate the ID
@@ -27,9 +30,18 @@ public class User {
     @Column(name = "password")  // Custom column name
     private String password;
 
+
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Contact> contacts;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Email> emails;
+
+
+
+
 
     // Getters and Setters
     public int getId() {
@@ -78,6 +90,29 @@ public class User {
         emails.add(email);
     }
 
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public void addContact(Contact contact) {
+        contact.setUser(this);
+        this.contacts.add(contact);
+    }
+
+
+    public void deleteContact(int index) {
+        this.contacts.remove(index);
+    }
+
+    public void modifyContact(Contact contact, int index) {
+        contact.setUser(this);
+        this.contacts.set(index, contact);
+    }
+
     public String getPassword() {
         return password;
     }
@@ -85,4 +120,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }
