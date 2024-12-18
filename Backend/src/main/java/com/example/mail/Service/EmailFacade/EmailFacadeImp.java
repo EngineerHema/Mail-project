@@ -33,7 +33,7 @@ public class EmailFacadeImp implements EmailFacade{
         Filter<Email> filter = filterStrategy.setFilteringStrategy(type);
         Sort<Email> sortingMethod = sortStratagy.setSortingStrategy(sort);
         Search<Email> searchingMethod = searchStratagy.setSearchingStrategy(search);
-        emails = filter.applyFilter(emails);
+        emails = filter.applyFilter(emails, type);
         emails = sortingMethod.applySort(emails);
         if (!substring.equals("")&&!substring.equals(null)&&substring.length()>0){
             emails = searchingMethod.applySearch(emails, substring);

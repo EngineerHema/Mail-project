@@ -125,6 +125,7 @@ function App({API_KEY, emailAddress}) {
       }
     };
 
+    
     fetchContacts();
   }, []);
 

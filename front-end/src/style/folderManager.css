@@ -90,10 +90,11 @@
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
+    margin-right: 5px;
   }
   
   .rename-folder-button:hover {
-    background-color: #e0a800;
+    background-color: #007200;
   }
   
   /* Delete button */

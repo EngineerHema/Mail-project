@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Email> emails;
+
+
+    @Column(name = "folders")
+    private List<String> folders;
 
 
 
@@ -129,6 +134,69 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
+
+    public List<String> getFolders() {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
+        return this.folders;
+    }
+
+    public void setFolders(List<String> folders) {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
+        this.folders = folders;
+    }
+
+    public void addFolders(String folder) {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
+        this.folders.add(folder);
+    }
+
+    public void deleteFolder(String folder) {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
+        this.folders.remove(folder);
+        for (Email email : emails) {
+            List<String> folderNames = email.getFoldersNames();
+            for (int i = 0; i < folderNames.size(); i++) {
+                if (folderNames.get(i).equals(folder)) {
+                    folderNames.remove(i);
+                }
+            }
+        }
+    }
+
+    public void modifyFolder(String oldFolder, String newFolder) {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
+
+        int index = this.folders.indexOf(oldFolder);
+        if (index != -1) {
+            // Update the folder name in the list
+            this.folders.set(index, newFolder);
+
+            // Iterate over each email and update folder names
+            for (Email email : emails) {
+                List<String> folderNames = email.getFoldersNames();
+                for (int i = 0; i < folderNames.size(); i++) {
+                    if (folderNames.get(i).equals(oldFolder)) {
+                        folderNames.set(i, newFolder);
+                    }
+                }
+            }
+        }
+    }
+
+
+
 
 
     public boolean isInboxObserver() {

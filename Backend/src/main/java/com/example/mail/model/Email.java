@@ -41,6 +41,10 @@ public class Email {
     @Column(name = "type")
     private String type;
 
+
+    @Column(name = "folders_names")
+    private List<String> foldersNames;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @JsonBackReference
@@ -108,6 +112,26 @@ public class Email {
         attachments.add(attachment);
     }
 
+    public List<String> getFoldersNames() {
+        if (this.foldersNames == null){
+            this.foldersNames = new ArrayList<>();
+        }
+        return foldersNames;
+    }
+
+    public void addFoldersName(String foldersName) {
+        if (this.foldersNames == null){
+            this.foldersNames = new ArrayList<>();
+        }
+        this.foldersNames.add(foldersName);
+    }
+
+    public void removeFoldersName(String foldersName) {
+        if (this.foldersNames == null){
+            this.foldersNames = new ArrayList<>();
+        }
+        this.foldersNames.remove(foldersName);
+    }
 
     public String getPriority() {
         return priority;
