@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class SentFilter implements Filter<Email> {
 
     @Override
-    public List<Email> applyFilter(List<Email> emails) {
+    public List<Email> applyFilter(List<Email> emails, String type) {
         return emails.stream()
                 .filter(email -> email.getType().equalsIgnoreCase("sent"))
                 .collect(Collectors.toList());

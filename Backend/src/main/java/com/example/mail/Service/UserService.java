@@ -70,4 +70,46 @@ public class UserService {
         }
         return null;
     }
+
+    public boolean saveFolder(String emailAddress, String name) {
+        Optional<User> user = jpaUsers.findByEmailAddress(emailAddress);
+        if (user.isPresent()) {
+            user.get().addFolders(name);
+            jpaUsers.save(user.get());
+            return true;
+        }
+        return false;
+
+    }
+
+    public boolean modifyFolder(String emailAddress, String oldName, String newName) {
+        Optional<User> user = jpaUsers.findByEmailAddress(emailAddress);
+        if (user.isPresent()) {
+            user.get().modifyFolder(oldName, newName);
+            jpaUsers.save(user.get());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean deleteFolder(String emailAddress, String name) {
+        Optional<User> user = jpaUsers.findByEmailAddress(emailAddress);
+        if (user.isPresent()) {
+            user.get().deleteFolder(name);
+            jpaUsers.save(user.get());
+            return true;
+        }
+        return false;
+    }
+
+    public List<String> getFolders(String emailAddress) {
+        Optional<User> user = jpaUsers.findByEmailAddress(emailAddress);
+        if (user.isPresent()) {
+            return user.get().getFolders();
+        }
+        return null;
+    }
+
+
+
 }
