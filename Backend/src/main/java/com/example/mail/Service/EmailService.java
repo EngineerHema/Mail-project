@@ -197,4 +197,32 @@ public class EmailService {
             return false;
         }
     }
+
+
+    public boolean restoreEmail(String address, String id) {
+        Optional<Email> email = jpaEmails.findById(Integer.parseInt(id));
+
+        if (email.isPresent()) {
+            Email retrievedEmail = email.get();
+            User emailOwner = retrievedEmail.getUser();
+            emailOwner.setDeleteObserver(true);
+
+
+            if (address.equals(retrievedEmail.getFromAddress())) {
+                retrievedEmail.setType("inbox");
+                emailOwner.setInboxObserver(true);
+            }
+
+            else if (address.equals(retrievedEmail.getToAddress())) {
+                retrievedEmail.setType("sent");
+                emailOwner.setSentObserver(true);
+            }
+
+            jpaEmails.save(retrievedEmail);
+            return true;
+        }
+
+        return false;
+    }
+
 }

@@ -406,6 +406,44 @@ public class UserActivity {
         }
     }
 
+    @PutMapping("/restoreEmail")
+    public ResponseEntity<?> restoreEmail(
+            @RequestHeader("Authorization") String authorization,
+            @RequestParam("Address") String address,
+            @RequestParam(value = "id", required = true) List<String> ids) {
+
+
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        if (apiKey == null || address == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing key or active address!");
+        }
+
+        if (apiKeyManager.validateApiKey(address, apiKey)) {
+            boolean allRestored = true;
+            boolean restored = true;
+
+            for (String id : ids) {
+                restored = emailService.restoreEmail(address, id);
+
+                if (!restored) {
+                    allRestored = false;
+                }
+            }
+
+            if (allRestored) {
+                return ResponseEntity.ok("Emails restored successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One or more emails not restored!");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key!");
+        }
+    }
+
+
+
 
 
     // Extract API Key from Authorization Header
