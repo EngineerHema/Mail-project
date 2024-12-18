@@ -4,7 +4,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function FoldersDropdown({ folders, onFolderSelect }) {
   // Set the initial selected folder or a placeholder if no folders exist
-  const [selectedFolder, setSelectedFolder] = useState(folders.length > 0 ? folders[0] : 'No folders created');
+  const [selectedFolder, setSelectedFolder] = useState(folders.length > 0 ? folders[0] : 'Folders');
 
   const handleSelect = (folder) => {
     console.log("Selected folder:", folder);
@@ -28,7 +28,7 @@ function FoldersDropdown({ folders, onFolderSelect }) {
           ))
         ) : (
           <NavDropdown.Item disabled>
-            No folders created
+            Folders
           </NavDropdown.Item>
         )}
       </NavDropdown>

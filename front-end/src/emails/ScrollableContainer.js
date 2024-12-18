@@ -7,12 +7,13 @@ import FilterList from './FilterList';
 import FoldersDropdown from './FoldersDropdown';
 import { fetchEmails } from '../fetchEmails'; // Importing fetchEmails
 import useFolderStore from '../useFolderStore'; // Import the store
+import FolderManager from '../folderManager';
 
 
 
 
 const ScrollableContainer = ({ API_KEY, Address, type}) => {
-  const { folders } = useFolderStore(); // Access folders directly from the store
+  const { folders, setFolders } = useFolderStore(); // Access folders directly from the store
   const [items, setItems] = useState([]);
   const [checkedEmails, setCheckedEmails] = useState([]); // State to store checked email IDs
   const sortMethod = useRef("PriorityHighToLow");
@@ -46,6 +47,30 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
   // Fetch emails on component mount
   useEffect(() => {
     fetchEmails(API_KEY, Address, type, setItems, substring, sortMethod, filterMethod);
+    
+    const fetchFolders = async () => {
+      const url = `http://localhost:8080/getFolders/${Address.current}`;
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            "Authorization": `Bearer ${API_KEY.current}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch folders");
+        }
+        const data = await response.json();
+        setFolders(data);
+        console.log("Fetched folders:", data);
+      } catch (error) {
+        console.error("Error fetching folders:", error);
+      }
+    };
+
+    
+    fetchFolders();
+
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
   const handleCheckboxToggle = (id, isChecked) => {

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useFolderStore from './useFolderStore';
 import './style/folderManager.css';
 import axios from 'axios';
 
 const FolderManager = ({API_KEY, emailAddress}) => {
   const [newFolderName, setNewFolderName] = useState("");
-  const { folders, addFolder, updateFolders, removeFolder } = useFolderStore();
+  const { folders, addFolder, updateFolders, removeFolder, setFolders } = useFolderStore();
 
 
   const handleAddFolder = async () => {
@@ -14,14 +14,9 @@ const FolderManager = ({API_KEY, emailAddress}) => {
       return;
     }
     
-  addFolder(newFolderName);
-  setNewFolderName(""); // Clear the input after adding the folder
-    
-    // Prepare the folder data for sending
-  
     try {
       console.log(newFolderName);
-      const response = await axios.post('http://localhost:8080/createFolder', newFolderName, {
+      const response = await axios.post('http://localhost:8080/createFolder', {name:newFolderName,emailAddress:emailAddress.current}, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${API_KEY.current}` // Make sure API_KEY is correctly accessed here
@@ -43,23 +38,93 @@ const FolderManager = ({API_KEY, emailAddress}) => {
   };
   
 
-  const handleRenameFolder = (index) => {
-    const oldName = folders[index]
-    const newName = prompt("Enter the new name for the folder:", folders[index]);
+  const handleRenameFolder = async (index) => {
+    const oldName = folders[index];
+    const newName = prompt("Enter the new name for the folder:", oldName);
+  
     if (newName && newName.trim() !== "") {
-      const updatedFolders = folders.map((folder, i) => i === index ? newName.trim() : folder);
-      updateFolders(updatedFolders);
+      try {
+        const response = await axios.put(
+          'http://localhost:8080/modifyFolder',
+          {
+            oldName,
+            newName,
+            emailAddress: emailAddress.current, // Ensure this is set correctly
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${API_KEY.current}`, // Ensure this is valid
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+  
+        if(response.ok){
+          const updatedFolders = folders.map((folder, i) =>
+            i === index ? newName.trim() : folder
+          );
+          updateFolders(updatedFolders);
+        }else{
+          console.log("Not deleted!")
+        }
+        
+      } catch (error) {
+        console.error("Error renaming folder:", error);
+        alert("Failed to rename the folder.");
+      }
     } else {
       alert("Folder name cannot be empty.");
     }
   };
+  
 
-  const handleDeleteFolder = (index) => {
+
+  const handleDeleteFolder = async (index) => {
     if (window.confirm("Are you sure you want to delete this folder?")) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:8080/deleteFolder/${folders[index]}/${emailAddress.current}`, 
+          {
+            headers: {
+              Authorization: `Bearer ${API_KEY.current}`, // Replace with your actual API key
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
       const updatedFolders = folders.filter((_, i) => i !== index);
       removeFolder(index); // We only need to update local state, backend handling is separate
     }
   };
+
+
+
+
+  useEffect(() => {
+    const fetchFolders = async () => {
+      const url = `http://localhost:8080/getFolders/${emailAddress.current}`;
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            "Authorization": `Bearer ${API_KEY.current}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch folders");
+        }
+        const data = await response.json();
+        setFolders(data);
+        console.log("Fetched folders:", data);
+      } catch (error) {
+        console.error("Error fetching folders:", error);
+      }
+    };
+
+    
+    fetchFolders();
+  }, []);
 
   return (
     <div className="folder-manager-container">
