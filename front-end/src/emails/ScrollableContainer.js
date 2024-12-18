@@ -7,7 +7,6 @@ import FilterList from './FilterList';
 import FoldersDropdown from './FoldersDropdown';
 import { fetchEmails } from '../fetchEmails'; // Importing fetchEmails
 import useFolderStore from '../useFolderStore'; // Import the store
-import FolderManager from '../folderManager';
 
 
 
@@ -30,14 +29,30 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("id", checkedEmails);
       url.searchParams.append("type", type);
-      console.log(Address.current,"hamdooooon", checkedEmails);
-
       const response = await fetch(url, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${API_KEY.current}` },
       });
 
-      if (response.ok) console.log("Email deleted successfully");
+      if (response.ok) alert("Email deleted successfully");
+      else console.error("Failed to delete email");
+    } catch (error) {
+      console.error("Error deleting email:", error);
+    }
+  };
+
+  const handleRestore = async (e) => {
+    e.preventDefault();
+    try {
+      const url = new URL(`http://localhost:8080/restoreEmail`);
+      url.searchParams.append("Address", Address.current);
+      url.searchParams.append("id", checkedEmails);
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${API_KEY.current}` },
+      });
+
+      if (response.ok) alert("Email deleted successfully");
       else console.error("Failed to delete email");
     } catch (error) {
       console.error("Error deleting email:", error);
@@ -51,15 +66,16 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("id", checkedEmails);
       url.searchParams.append("name", currentFolder);
-      console.log("hamdooooon",currentFolder);
-      console.log(Address.current,"hamdooooon", checkedEmails);
 
       const response = await fetch(url, {
         method: "POST",
         headers: { Authorization: `Bearer ${API_KEY.current}` },
       });
 
-      if (response.ok) console.log("added to folder successfully");
+      if (response.ok) {console.log("added to folder successfully");
+        alert("Email added to folder successfully");
+      }
+
       else console.error("Failed to add email");
     } catch (error) {
       console.error("Error adding email:", error);
@@ -92,11 +108,9 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
 
     
     fetchFolders();
-
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
   const handleCheckboxToggle = (id, isChecked) => {
-    
     setCheckedEmails((prevCheckedEmails) =>
       isChecked
         ? [...prevCheckedEmails, id] // Add email ID if checked
@@ -140,6 +154,10 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       {type === "inbox" && 
       <><FoldersDropdown folders={folders} onFolderSelect={handleFolderSelect} />
       <button className="move-button" onClick={handleAddtoFolder}>Move</button></>
+          }
+
+      {type === "trash" && 
+      <><button className="move-button" onClick={handleRestore}>Restore</button></>
           }
     </div>
     </div>
