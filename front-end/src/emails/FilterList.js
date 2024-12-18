@@ -1,47 +1,33 @@
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { useState } from 'react';
-
+import React, { useState } from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
+import '../style/SortList.css'; // Continue to use your custom CSS if needed for additional styling
 
 function FilterList({ FilterMethod }) {
-  const [Method, setMethod] = useState("Filter Method");
-  const handleSelect = (method) => {
-    FilterMethod.current=method;
-    setMethod(method)
-    if(FilterMethod?.current === null || FilterMethod?.current === undefined){
-        FilterMethod.current="All";
+  const [method, setMethod] = useState("Filter Method");
+
+  const handleSelect = (selectedMethod) => {
+    console.log("Selected Method:", selectedMethod);
+    if (FilterMethod && FilterMethod.current) {
+      FilterMethod.current = selectedMethod;
     }
+    setMethod(selectedMethod);
   };
 
   return (
-    <Navbar variant="dark" bg="dark" expand="lg" className='filter_list'>
-      
-            <NavDropdown
-              id="nav-dropdown-dark-example"
-              title= {Method}
-              menuVariant="dark"
-              className='list'
-            >
-                <NavDropdown.Item onClick={() => handleSelect("All")}>
-              All
-              </NavDropdown.Item>    
-              <NavDropdown.Item onClick={() => handleSelect("Head")}>
-              Head
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => handleSelect("Body")}>
-              Body
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => handleSelect("Attachment")}>
-              Attachment
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => handleSelect("Sender")}>
-              Sender
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => handleSelect("Receiver")}>
-              Receiver
-              </NavDropdown.Item>
-            </NavDropdown>
-    </Navbar>
+    <Dropdown onSelect={handleSelect}>
+      <Dropdown.Toggle variant="danger" id="dropdown-basic">
+        {method}
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item eventKey="All">All</Dropdown.Item>
+        <Dropdown.Item eventKey="Head">Head</Dropdown.Item>
+        <Dropdown.Item eventKey="Body">Body</Dropdown.Item>
+        <Dropdown.Item eventKey="Attachment">Attachment</Dropdown.Item>
+        <Dropdown.Item eventKey="Sender">Sender</Dropdown.Item>
+        <Dropdown.Item eventKey="Receiver">Receiver</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
   );
 }
 

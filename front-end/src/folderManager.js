@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const FolderManager = ({API_KEY, emailAddress}) => {
   const [newFolderName, setNewFolderName] = useState("");
-  const { folders, addFolder, updateFolders, removeFolder } = useFolderStore();
+  const { folders, addFolder, updateFolders, removeFolder, setFolders } = useFolderStore();
 
 
   const handleAddFolder = async () => {
