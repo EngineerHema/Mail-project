@@ -422,7 +422,7 @@ public class UserActivity {
 
         if (apiKeyManager.validateApiKey(address, apiKey)) {
             boolean allRestored = true;
-            boolean restored = true;
+            boolean restored;
 
             for (String id : ids) {
                 restored = emailService.restoreEmail(address, id);
