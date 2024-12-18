@@ -12,7 +12,7 @@ function Folders({ API_KEY, emailAddress, name }) {
         <div className="scrollable_flex">
         <SideBar/>
         <div className="contacts_container">
-        <FolderManager/>
+        <FolderManager API_KEY={API_KEY} emailAddress={emailAddress}/>
         </div>
       </div>
 
