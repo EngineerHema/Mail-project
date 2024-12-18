@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class TrashFilter implements Filter<Email> {
 
     @Override
-    public List<Email> applyFilter(List<Email> emails) {
+    public List<Email> applyFilter(List<Email> emails, String type) {
         return emails.stream()
                 .filter(email -> email.getType().equalsIgnoreCase("trash"))
                 .collect(Collectors.toList());

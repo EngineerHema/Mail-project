@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class StarFilter implements Filter<Email> {
+public class FolderFilter implements Filter<Email> {
 
     @Override
     public List<Email> applyFilter(List<Email> emails, String type) {
         return emails.stream()
-                .filter(email -> email.getType().equalsIgnoreCase("star"))
+                .filter(email -> email.getFoldersNames().contains(type))
                 .collect(Collectors.toList());
     }
 }
