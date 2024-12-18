@@ -6,6 +6,7 @@ import com.example.mail.Service.UserService;
 import com.example.mail.model.Attachment;
 import com.example.mail.model.Contact;
 import com.example.mail.model.Email;
+import com.example.mail.model.User;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -119,7 +120,7 @@ public class UserActivity {
     public ResponseEntity<?> deleteEmail(
             @RequestHeader("Authorization") String authorization,
             @RequestParam("Address") String address,
-            @RequestParam(value = "id", required = true) String id) throws ExecutionException, InterruptedException {
+            @RequestParam(value = "id", required = true) List<String> ids) {
 
         String apiKey = extractApiKey(authorization);
         System.out.println("Key: " + apiKey);
@@ -129,13 +130,25 @@ public class UserActivity {
         }
 
         if (apiKeyManager.validateApiKey(address, apiKey)) {
-            if (emailService.deleteEmail(id)) return ResponseEntity.ok("Email is deleted!");
-            else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email not found!");
+            boolean allDeleted = true;
 
+            for (String id : ids) {
+                boolean deleted = emailService.deleteEmail(id);
+                if (!deleted) {
+                    allDeleted = false;
+                }
+            }
+
+            if (allDeleted) {
+                return ResponseEntity.ok("Emails deleted successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One or more emails not found!");
+            }
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key!");
         }
     }
+
 
     @PostMapping("/contacts")
     public ResponseEntity<String> saveContact(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
@@ -250,6 +263,102 @@ public class UserActivity {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getContacts(emailAddress));
 
     }
+
+        @PostMapping("/createFolder")
+        public ResponseEntity<String> createFolder(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
+            // Extract API key from the Authorization header
+            String apiKey = extractApiKey(authorization);
+            System.out.println("Key: " + apiKey);
+
+            // Check if the required parameters are present
+            if (apiKey == null || requestBody.get("emailAddress") == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or email.");
+            }
+
+            // Validate the API key
+            String emailAddress = requestBody.get("emailAddress").toString();
+            if (!apiKeyManager.validateApiKey(emailAddress, apiKey)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+            }
+
+            if (userService.saveFolder(emailAddress, requestBody.get("name").toString())) {
+                return ResponseEntity.status(HttpStatus.OK).body("Folder saved.");
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to save Folder.");
+
+    }
+
+    @PutMapping("/modifyFolder")
+    public ResponseEntity<String> modifyFolder(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
+        // Extract API key from the Authorization header
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        // Check if the required parameters are present
+        if (apiKey == null || requestBody.get("emailAddress") == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or email.");
+        }
+
+        // Validate the API key
+        String emailAddress = requestBody.get("emailAddress").toString();
+        if (!apiKeyManager.validateApiKey(emailAddress, apiKey)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+        }
+
+         if (userService.modifyFolder(emailAddress, requestBody.get("oldName").toString(), requestBody.get("newName").toString())) {
+            return ResponseEntity.status(HttpStatus.OK).body("Folder saved.");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to save Folder.");
+
+    }
+
+    @DeleteMapping("deleteFolder/{name}/{emailAddress}")
+    public ResponseEntity<String> deleteFolder(@RequestHeader("Authorization") String authorization, @PathVariable String name, @PathVariable String emailAddress) throws ExecutionException, InterruptedException {
+        // Extract API key from the Authorization header
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        // Check if the required parameters are present
+        if (apiKey == null || emailAddress == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or email.");
+        }
+
+
+        if (!apiKeyManager.validateApiKey(emailAddress, apiKey)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+        }
+
+        if (userService.deleteFolder(emailAddress, name)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Folder deleted.");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete Folder.");
+
+    }
+
+    @GetMapping("getFolders/{emailAddress}")
+    public ResponseEntity<?> getFolders(@RequestHeader("Authorization") String authorization, @PathVariable String emailAddress) throws ExecutionException, InterruptedException {
+        // Extract API key from the Authorization header
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        // Check if the required parameters are present
+        if (apiKey == null || emailAddress == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing API key or email.");
+        }
+
+
+        if (!apiKeyManager.validateApiKey(emailAddress, apiKey)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getFolders(emailAddress));
+
+
+    }
+
 
     // Extract API Key from Authorization Header
     private String extractApiKey(String authorization) {
