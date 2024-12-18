@@ -14,7 +14,9 @@ function Email({
   time,
   attachments,
   API_KEY,
-  onCheckboxToggle, // Handler from parent
+  onCheckboxToggle,
+  singleAddressDraft,
+  toAddressDraft,
 
 }) {
   const [isChecked, setIsChecked] = useState(false); // State to manage checkbox value
@@ -65,8 +67,18 @@ function Email({
         <div className="email-card-header">
           <div className="priority-indicator" style={{ backgroundColor: color }}></div>
           <Link
-            to="/openEmail"
-            state={{ sender, header, body, color, receiver, time, attachments }}
+            to={type === "draft" ? "/myComposeEmail" : "/openEmail"}
+            state={{
+              sender,
+              header,
+              body,
+              color,
+              receiver,
+              time,
+              attachments,
+              singleAddressDraft,
+              toAddressDraft,
+            }}
             className="email-card-link"
           >
             <span className={type === "sent" ? "for" : "from"}>{head}</span>

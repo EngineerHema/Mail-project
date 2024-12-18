@@ -3,20 +3,22 @@ import axios from 'axios';
 import { EmailBuilder } from './NewEmail';
 import "../style/EmailForm.css";
 
-const EmailForm = ({ API_KEY, emailAddress }) => {
+const EmailForm = ({ API_KEY, emailAddress , header, body, color, receiver, attachments ,singleAddressDraft,toAddressDraft }) => {
   const [priorityChange, setPriorityChange] = useState(false);
-  const [isDraft, setIsDraft] = useState(false); // New state for tracking draft status
+  const [isDraft, setIsDraft] = useState(false); 
+  const checkIsDraft = useRef(false)
   const [formData, setFormData] = useState({
     fromAddress: '',
-    subject: '',
-    receiverEmail: '',
-    toAddress: [],
-    body: '',
-    attachments: [],
+    subject: header ?? "", 
+    receiverEmail: singleAddressDraft ?? "", 
+    toAddress: toAddressDraft ?? [], 
+    body: body ?? "", 
+    attachments: attachments ?? [], 
     priority: 'medium',
   });
 
   const formDataRef = useRef(formData);
+  console.log("check hema"+formData)
   useEffect(() => {
     formDataRef.current = formData;
   }, [formData]);
@@ -32,12 +34,24 @@ const EmailForm = ({ API_KEY, emailAddress }) => {
       priorityChange
     );
   };
+  const isFormEmpty = () => {
+    return (
+      header.length > 0 ||
+      body.length > 0 ||
+      singleAddressDraft.length > 0 ||
+      toAddressDraft.length > 0 ||
+      attachments.length > 0
+    );
+  };
 
   // Handling form submission when the component unmounts
   useEffect(() => {
     return () => {
-      if (isFormNotEmpty()) {
+      if (isFormNotEmpty()&&checkIsDraft.current) {
         handleSubmit(true); // Call handleSubmit with isDraft true when the form is not empty
+      }
+      else{
+        checkIsDraft.current=true
       }
     };
   }, []);
@@ -118,22 +132,23 @@ const EmailForm = ({ API_KEY, emailAddress }) => {
 
   const handleSubmit = (isDraftSubmit = false) => {
     setIsDraft(isDraftSubmit); // Set draft status before sending
-
+    const { subject, receiverEmail, toAddress, body, attachments,priority } = formDataRef.current;
     const emailBuilder = new EmailBuilder();
     const email = emailBuilder
       .setFromAddress(emailAddress.current)
-      .setSubject(formData.subject)
-      .setBody(formData.body);
+      .setSubject(subject)
+      .setBody(body)
+      .setSingleAddressDraft(receiverEmail);
 
-    formData.toAddress.forEach((address) => emailBuilder.addToAddress(address));
-    formData.attachments.forEach((attachment) => emailBuilder.addAttachment(attachment));
-    emailBuilder.setPriority(formData.priority);
+    toAddress.forEach((address) => emailBuilder.addToAddress(address));
+    attachments.forEach((attachment) => emailBuilder.addAttachment(attachment));
+    emailBuilder.setPriority(priority);
     emailBuilder.setIsDraft(isDraftSubmit); // Pass isDraft to EmailBuilder
 
     const emailObject = emailBuilder.build();
+    console.log(emailObject)
     sendEmailToBackend(emailObject);
 
-    // Reset form data after submission
     setFormData({
       fromAddress: '',
       subject: '',

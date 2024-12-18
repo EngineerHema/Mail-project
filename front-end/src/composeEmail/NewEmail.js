@@ -1,25 +1,30 @@
+// Email Class
 export class Email {
-  constructor(id, fromAddress, toAddress, subject, body, attachments, priority, isDraft) {
+  constructor(id, fromAddress, toAddress, singleAddressDraft, subject, body, attachments, priority, isDraft) {
     this.id = id;
     this.fromAddress = fromAddress;
     this.toAddress = toAddress;
+    this.singleAddressDraft = singleAddressDraft; // New property
     this.subject = subject;
     this.body = body;
     this.attachments = attachments;
     this.priority = priority;
-    this.isDraft = isDraft; 
+    this.isDraft = isDraft;
   }
 }
 
+// EmailBuilder Class
 export class EmailBuilder {
   constructor() {
+    this.id = null; // Optional for completeness
     this.fromAddress = '';
     this.toAddress = [];
+    this.singleAddressDraft = ''; // New property
     this.subject = '';
     this.body = '';
     this.attachments = [];
     this.priority = 'medium';
-    this.isDraft = false;  
+    this.isDraft = false;
   }
 
   setFromAddress(fromAddress) {
@@ -31,6 +36,11 @@ export class EmailBuilder {
     if (address && !this.toAddress.includes(address)) {
       this.toAddress.push(address);
     }
+    return this;
+  }
+
+  setSingleAddressDraft(singleAddressDraft) { // New setter
+    this.singleAddressDraft = singleAddressDraft;
     return this;
   }
 
@@ -64,11 +74,12 @@ export class EmailBuilder {
       this.id,
       this.fromAddress,
       this.toAddress,
+      this.singleAddressDraft, // Include the new property
       this.subject,
       this.body,
       this.attachments,
       this.priority,
-      this.isDraft  
+      this.isDraft
     );
   }
 }

@@ -62,6 +62,10 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
             type : type,
             time : email.timeStamp,
             attachments : email.attachments,
+            singleAddressDraft : email.singleAddressDraft,
+            toAddressDraft : email.toAddressDraft,
+
+
           };
         });
 
@@ -95,13 +99,12 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
     }
   };
 
-  // Fetch emails on component mount
+  
   useEffect(() => {
     fetchEmails();
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
   const handleCheckboxToggle = (id, isChecked) => {
-
     setCheckedEmails((prevCheckedEmails) =>
       isChecked
         ? [...prevCheckedEmails, id] // Add email ID if checked
@@ -150,6 +153,9 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
               time={item.time}
               attachments={item.attachments}
               API_KEY={API_KEY}
+              singleAddressDraft= {item.singleAddressDraft}
+              toAddressDraft = {item.toAddressDraft}
+
               onCheckboxToggle={handleCheckboxToggle} // Pass the handler to Email component
             />
           ))

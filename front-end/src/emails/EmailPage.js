@@ -4,9 +4,8 @@ import "../style/Email.css";
 import { Card } from "react-bootstrap";
 
 const EmailPage = () => {
-  const location = useLocation(); // Access state from Link
-  const { sender, header, body, color, receiver, time, attachments } = location.state || {}; // Destructure state
-
+  const location = useLocation(); 
+  const { sender, header, body, color, receiver, time, attachments ,singleAddressDraft,toAddressDraft} = location.state || {}; 
   const formatTime = (time) => {
     const date = new Date(time);
     return date.toLocaleString("en-US", {
