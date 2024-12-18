@@ -148,4 +148,53 @@ public class EmailService {
         }
     }
 
+    public boolean addToFolder(String id, String folderName) {
+        Optional<Email> email = jpaEmails.findById(Integer.parseInt(id));
+        if (email.isPresent() && !email.get().getFoldersNames().contains(folderName)){
+            email.get().addFoldersName(folderName);
+            jpaEmails.save(email.get());
+            return true;
+        }
+        return false;
+    }
+
+    public List<Email> returnFolderEmails(String address, String type, String sort, String search, String substring) {
+        try {
+
+            Optional<User> user = jpaUsers.findByEmailAddress(address);
+            List<Email> emails = user.get().getEmails();
+
+
+            if (emails!=null) {
+                emails = emailFacade.modifyEmail(emails, type, sort, search, substring);
+                System.out.println(emails);
+                System.out.println("substring is" + substring);
+                System.out.println("this is the emails");
+            }
+            jpaUsers.save(user.get());
+
+            return emails;
+        }
+
+        catch (Error e){
+            return null;
+        }
+    }
+
+    public boolean deleteFromFolder(String id, String type) {
+        try {
+            Optional<Email> email = jpaEmails.findById(Integer.parseInt(id));
+            User emailOwner = email.get().getUser();
+
+            if (email.isPresent()){
+                email.get().removeFoldersName(type);
+            }
+
+            jpaUsers.save(emailOwner);
+            return true;
+        }catch (Error e){
+            System.out.println("At deleteFolder: "+e);
+            return false;
+        }
+    }
 }

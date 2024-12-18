@@ -11,20 +11,25 @@ public class FilterStrategyImp implements FilterStrategy {
     private SentFilter sentFilter;
     private TrashFilter trashFilter;
     private StarFilter starFilter;
+    private FolderFilter folderFilter;
+
 
 
     @Autowired
-    public FilterStrategyImp(InboxFilter inboxFilter, SentFilter sentFilter, TrashFilter trashFilter, StarFilter starFilter) {
+    public FilterStrategyImp(InboxFilter inboxFilter, SentFilter sentFilter, TrashFilter trashFilter, StarFilter starFilter, FolderFilter folderFilter) {
         this.inboxFilter = inboxFilter;
         this.sentFilter = sentFilter;
         this.trashFilter = trashFilter;
         this.starFilter = starFilter;
+        this.folderFilter = folderFilter;
     }
 
     @Override
     public Filter<Email> setFilteringStrategy(String type) {
 
         switch (type.toLowerCase()) {
+            case "inbox":
+                return inboxFilter;
             case "sent":
                 return sentFilter;
             case "trash":
@@ -32,7 +37,7 @@ public class FilterStrategyImp implements FilterStrategy {
             case "star":
                 return starFilter;
             default:
-                return inboxFilter;
+                return folderFilter;
         }
     }
 

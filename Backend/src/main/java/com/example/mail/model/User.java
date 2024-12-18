@@ -138,10 +138,16 @@ public class User {
 
 
     public List<String> getFolders() {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
         return this.folders;
     }
 
     public void setFolders(List<String> folders) {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
         this.folders = folders;
     }
 
@@ -153,6 +159,9 @@ public class User {
     }
 
     public void deleteFolder(String folder) {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
         this.folders.remove(folder);
         for (Email email : emails) {
             List<String> folderNames = email.getFoldersNames();
@@ -165,6 +174,10 @@ public class User {
     }
 
     public void modifyFolder(String oldFolder, String newFolder) {
+        if (this.folders == null){
+            this.folders = new ArrayList<>();
+        }
+
         int index = this.folders.indexOf(oldFolder);
         if (index != -1) {
             // Update the folder name in the list

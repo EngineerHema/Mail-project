@@ -113,11 +113,24 @@ public class Email {
     }
 
     public List<String> getFoldersNames() {
+        if (this.foldersNames == null){
+            this.foldersNames = new ArrayList<>();
+        }
         return foldersNames;
     }
 
     public void addFoldersName(String foldersName) {
+        if (this.foldersNames == null){
+            this.foldersNames = new ArrayList<>();
+        }
         this.foldersNames.add(foldersName);
+    }
+
+    public void removeFoldersName(String foldersName) {
+        if (this.foldersNames == null){
+            this.foldersNames = new ArrayList<>();
+        }
+        this.foldersNames.remove(foldersName);
     }
 
     public String getPriority() {

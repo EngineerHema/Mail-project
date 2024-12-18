@@ -28,6 +28,8 @@ public class UserActivity {
     @Autowired
     private UserService userService;
 
+    private final List<String> validTypes = Arrays.asList("inbox", "trash", "sent", "defaultType");
+
     @PostMapping("/sendEmail")
     public ResponseEntity<String> sendEmail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
         // Extract API key from the Authorization header
@@ -107,8 +109,13 @@ public class UserActivity {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
+        List<Email> emails;
         if (apiKeyManager.validateApiKey(address, apiKey)) {
-            List<Email> emails = emailService.returnEmails(address, type, sort, search, substring);
+            if (validTypes.contains(type)){
+                emails = emailService.returnEmails(address, type, sort, search, substring);
+            }else {
+                emails = emailService.returnFolderEmails(address, type, sort, search, substring);
+            }
             return ResponseEntity.ok(emails);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
@@ -120,7 +127,9 @@ public class UserActivity {
     public ResponseEntity<?> deleteEmail(
             @RequestHeader("Authorization") String authorization,
             @RequestParam("Address") String address,
-            @RequestParam(value = "id", required = true) List<String> ids) {
+            @RequestParam(value = "id", required = true) List<String> ids,
+            @RequestParam(value = "type", required = false) String type) {
+
 
         String apiKey = extractApiKey(authorization);
         System.out.println("Key: " + apiKey);
@@ -133,7 +142,12 @@ public class UserActivity {
             boolean allDeleted = true;
 
             for (String id : ids) {
-                boolean deleted = emailService.deleteEmail(id);
+                boolean deleted = true;
+                if (validTypes.contains(type)) {
+                    deleted = emailService.deleteEmail(id);
+                }else {
+                    deleted = emailService.deleteFromFolder(id, type);
+                }
                 if (!deleted) {
                     allDeleted = false;
                 }
@@ -307,7 +321,7 @@ public class UserActivity {
         }
 
          if (userService.modifyFolder(emailAddress, requestBody.get("oldName").toString(), requestBody.get("newName").toString())) {
-            return ResponseEntity.status(HttpStatus.OK).body("Folder saved.");
+            return ResponseEntity.status(HttpStatus.OK).body("Folder renamed.");
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to save Folder.");
@@ -356,8 +370,42 @@ public class UserActivity {
 
         return ResponseEntity.status(HttpStatus.OK).body(userService.getFolders(emailAddress));
 
-
     }
+
+    @PostMapping("/addToFolder")
+    public ResponseEntity<?> addToFolder(
+            @RequestHeader("Authorization") String authorization,
+            @RequestParam("Address") String address,
+            @RequestParam(value = "id", required = true) List<String> ids,
+            @RequestParam("name") String folderName) {
+
+        String apiKey = extractApiKey(authorization);
+        System.out.println("Key: " + apiKey);
+
+        if (apiKey == null || address == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing key or active address!");
+        }
+
+        if (apiKeyManager.validateApiKey(address, apiKey)) {
+            boolean allAdded = true;
+
+            for (String id : ids) {
+                boolean added = emailService.addToFolder(id, folderName);
+                if (!added) {
+                    allAdded = false;
+                }
+            }
+
+            if (allAdded) {
+                return ResponseEntity.ok("Emails added successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One or more emails not added!");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid API key!");
+        }
+    }
+
 
 
     // Extract API Key from Authorization Header
