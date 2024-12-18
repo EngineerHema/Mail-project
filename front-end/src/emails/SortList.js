@@ -1,44 +1,33 @@
-import { useState } from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-
+import React, { useState, useRef } from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import '../style/SortList.css';  // Assuming you might still want to apply custom styles
 
 function SortList({ sortMethod }) {
-  const [Method, setMethod] = useState("PriorityHighToLow");
+  const [method, setMethod] = useState("PriorityHighToLow");
+  const methodRef = useRef(method); // Use ref to ensure up-to-date access inside callbacks
 
-  const handleSelect = (method) => {
-    console.log(method)
-    sortMethod.current=method;
-    setMethod(method)
-    if(sortMethod?.current === null || sortMethod?.current === undefined){
-    sortMethod.current="PriorityHighToLow";
+  const handleSelect = (selectedMethod) => {
+    console.log("Selected Method:", selectedMethod);
+    methodRef.current = selectedMethod;  // Update ref
+    if (sortMethod && sortMethod.current) {
+      sortMethod.current = selectedMethod; // Update sortMethod if it's provided as a ref
     }
+    setMethod(selectedMethod); // Update the local state
   };
 
   return (
-    <Navbar variant="dark" bg="dark" expand="lg" className='filter_list'>
-      
-      
-            <NavDropdown
-              id="nav-dropdown-dark-example"
-              title= {Method}
-              menuVariant="dark"
-              className='list'
-            >
-              <NavDropdown.Item onClick={() => handleSelect("Time Old To New")}>
-                Time old to new
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => handleSelect("Time New To Old")}>
-                Time new to old
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => handleSelect("Priority High To Low")}>
-                Priority high to low
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => handleSelect("Priority Low To High")}>
-                Priority low to high
-              </NavDropdown.Item>
-            </NavDropdown>
-    </Navbar>
+    <DropdownButton
+      id="dropdown-basic-button"
+      title={methodRef.current}
+      className="sort-dropdown" // Additional custom classes if needed
+      onSelect={handleSelect}
+    >
+      <Dropdown.Item eventKey="Time Old To New">Time old to new</Dropdown.Item>
+      <Dropdown.Item eventKey="Time New To Old">Time new to old</Dropdown.Item>
+      <Dropdown.Item eventKey="Priority High To Low">Priority high to low</Dropdown.Item>
+      <Dropdown.Item eventKey="Priority Low To High">Priority low to high</Dropdown.Item>
+    </DropdownButton>
   );
 }
 

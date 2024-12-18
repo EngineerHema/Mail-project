@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useFolderStore from './useFolderStore';
 import './style/folderManager.css';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 const FolderManager = ({API_KEY, emailAddress}) => {
   const [newFolderName, setNewFolderName] = useState("");
@@ -76,8 +77,6 @@ const FolderManager = ({API_KEY, emailAddress}) => {
       alert("Folder name cannot be empty.");
     }
   };
-  
-
 
   const handleDeleteFolder = async (index) => {
     if (window.confirm("Are you sure you want to delete this folder?")) {
@@ -97,9 +96,6 @@ const FolderManager = ({API_KEY, emailAddress}) => {
       removeFolder(index); // We only need to update local state, backend handling is separate
     }
   };
-
-
-
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -144,18 +140,28 @@ const FolderManager = ({API_KEY, emailAddress}) => {
       <ul className="folder-list">
         {folders.map((folder, index) => (
           <li key={index} className="folder-item">
+
+              <Link
+              to="/folderPage"
+              state={{ folder }}
+              >
             <span>{folder}</span>
+            </Link>
+
+            <div>
             <button onClick={() => handleRenameFolder(index)} className="rename-folder-button">
               Rename
             </button>
             <button onClick={() => handleDeleteFolder(index)} className="delete-folder-button">
               Delete
             </button>
+            </div>
           </li>
         ))}
       </ul>
     </div>
   );
 };
+
 
 export default FolderManager;

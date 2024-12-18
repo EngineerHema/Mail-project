@@ -13,14 +13,13 @@ import FolderManager from '../folderManager';
 
 
 const ScrollableContainer = ({ API_KEY, Address, type}) => {
-  const { folders, setFolders } = useFolderStore(); // Access folders directly from the store
   const [items, setItems] = useState([]);
   const [checkedEmails, setCheckedEmails] = useState([]); // State to store checked email IDs
   const sortMethod = useRef("PriorityHighToLow");
   const filterMethod = useRef("All");
   const substring = useRef("");
-  const [currentFolder, setCurrentFolder] = useState("");
-
+  const { folders,setFolders } = useFolderStore(); // Access folders directly from the store
+  const [currentFolder, setCurrentFolder] = useState(folders[0] || "");
 
 
 
@@ -30,6 +29,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       const url = new URL(`http://localhost:8080/deleteEmail`);
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("id", checkedEmails);
+      url.searchParams.append("type", type);
       console.log(Address.current,"hamdooooon", checkedEmails);
 
       const response = await fetch(url, {
@@ -41,6 +41,28 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       else console.error("Failed to delete email");
     } catch (error) {
       console.error("Error deleting email:", error);
+    }
+  };
+
+  const handleAddtoFolder = async (e) => {
+    e.preventDefault();
+    try {
+      const url = new URL(`http://localhost:8080/addToFolder`);
+      url.searchParams.append("Address", Address.current);
+      url.searchParams.append("id", checkedEmails);
+      url.searchParams.append("name", currentFolder);
+      console.log("hamdooooon",currentFolder);
+      console.log(Address.current,"hamdooooon", checkedEmails);
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${API_KEY.current}` },
+      });
+
+      if (response.ok) console.log("added to folder successfully");
+      else console.error("Failed to add email");
+    } catch (error) {
+      console.error("Error adding email:", error);
     }
   };
 
@@ -74,7 +96,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
   const handleCheckboxToggle = (id, isChecked) => {
-
+    
     setCheckedEmails((prevCheckedEmails) =>
       isChecked
         ? [...prevCheckedEmails, id] // Add email ID if checked
@@ -90,31 +112,37 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
     setCurrentFolder(folder);
   };
 
+  const handleApply = () => {
+    // Make sure all references are current and valid
+    fetchEmails(API_KEY, Address, type, setItems, substring, sortMethod, filterMethod);
+    
+  };
+  
+
 
   return (
     <div className='page2'>
       <div className="scrollable-container">
+        <div className='top-container'>
         <div className='allSearchFilter'>
-        <div className='search_filter_container'>
-        <SortList sortMethod={sortMethod}/>
-        <FilterList FilterMethod={filterMethod}/>
-        <SearchBar substring={substring}/>
-        <div class="button-container">
-        <button class="cool-button" onClick={fetchEmails}>Apply</button>
-        </div>
-      </div>
-      <button class="delete-button" onClick={handleDelete}>Delete</button>
-      </div>
+  <div className='search_filter_container'>
+    <SortList sortMethod={sortMethod}/>
+    <FilterList FilterMethod={filterMethod}/>
+    <SearchBar substring={substring}/>
+    <div className="button-container">
+    <button className="cool-button" onClick={handleApply}>Apply</button>
+    <button className="delete-button" onClick={handleDelete}>Delete</button>
+    </div>
+  </div> 
+</div>
 
+      <div className='right-container'>
       {type === "inbox" && 
-      <div>
-      <FoldersDropdown folders={folders} onFolderSelect={handleFolderSelect} />
-      <div>
-        Currently viewing: {currentFolder}
-        </div>
-        </div>
+      <><FoldersDropdown folders={folders} onFolderSelect={handleFolderSelect} />
+      <button className="move-button" onClick={handleAddtoFolder}>Move</button></>
           }
-    
+    </div>
+    </div>
 
         {items.length === 0 ? (
           <div className="no-emails-message">
@@ -136,7 +164,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
               time={item.time}
               attachments={item.attachments}
               API_KEY={API_KEY}
-              onCheckboxToggle={handleCheckboxToggle} // Pass the handler to Email component
+              onCheckboxToggle={handleCheckboxToggle}
             />
           ))
         )}

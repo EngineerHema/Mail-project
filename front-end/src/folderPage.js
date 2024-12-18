@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 
 function FolderPage({ API_KEY, emailAddress, name}) {
     const location = useLocation();
-    const {folder} = location.state || {};
+    const { folder } = location.state || {};
     
         return (
      <div>

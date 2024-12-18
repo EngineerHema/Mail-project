@@ -1,38 +1,33 @@
-import { useState } from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import React, { useState } from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
+import '../style/SortList.css'; // Only if you need extra custom styles
 
 function FoldersDropdown({ folders, onFolderSelect }) {
-  // Set the initial selected folder or a placeholder if no folders exist
   const [selectedFolder, setSelectedFolder] = useState(folders.length > 0 ? folders[0] : 'Folders');
 
   const handleSelect = (folder) => {
-    console.log("Selected folder:", folder);
     setSelectedFolder(folder);
     onFolderSelect(folder);
   };
 
   return (
-    <Navbar variant="dark" bg="dark" expand="lg" className='filter_list'>
-      <NavDropdown
-        id="nav-dropdown-folders"
-        title={selectedFolder}
-        menuVariant="dark"
-        className='list'
-      >
+    <Dropdown onSelect={handleSelect} >
+      <Dropdown.Toggle  id="dropdown-basic" className='folder-toggle'>
+        {selectedFolder}
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
         {folders.length > 0 ? (
           folders.map((folder, index) => (
-            <NavDropdown.Item key={index} onClick={() => handleSelect(folder)}>
+            <Dropdown.Item key={index} eventKey={folder}>
               {folder}
-            </NavDropdown.Item>
+            </Dropdown.Item>
           ))
         ) : (
-          <NavDropdown.Item disabled>
-            Folders
-          </NavDropdown.Item>
+          <Dropdown.Item disabled>No folders created</Dropdown.Item>
         )}
-      </NavDropdown>
-    </Navbar>
+      </Dropdown.Menu>
+    </Dropdown>
   );
 }
 
