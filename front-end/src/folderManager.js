@@ -1,73 +1,69 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import "./style/folderManager.css"; // Import the CSS file
+import useFolderStore from './useFolderStore';
+import './style/folderManager.css';
+import axios from 'axios';
 
-const FolderManager = () => {
-  const [folders, setFolders] = useState([]); // State to store folder names
+const FolderManager = ({API_KEY, emailAddress}) => {
   const [newFolderName, setNewFolderName] = useState("");
+  const { folders, addFolder, updateFolders, removeFolder } = useFolderStore();
 
-  // Function to handle adding a folder
-  const handleAddFolder = () => {
+
+  const handleAddFolder = async () => {
     if (newFolderName.trim() === "") {
       alert("Folder name cannot be empty.");
       return;
     }
-    setFolders((prevFolders) => {
-      const updatedFolders = [...prevFolders, newFolderName];
-      sendFoldersToBackend(updatedFolders);
-      return updatedFolders;
-    });
-    setNewFolderName(""); // Clear input
-  };
-
-  // Function to handle renaming a folder
-  const handleRenameFolder = (index) => {
-    const newName = prompt("Enter the new name for the folder:");
-    if (newName && newName.trim() !== "") {
-      setFolders((prevFolders) => {
-        const updatedFolders = [...prevFolders];
-        updatedFolders[index] = newName.trim();
-        sendFoldersToBackend(updatedFolders);
-        return updatedFolders;
+    
+  addFolder(newFolderName);
+  setNewFolderName(""); // Clear the input after adding the folder
+    
+    // Prepare the folder data for sending
+  
+    try {
+      console.log(newFolderName);
+      const response = await axios.post('http://localhost:8080/createFolder', newFolderName, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${API_KEY.current}` // Make sure API_KEY is correctly accessed here
+        },
       });
+  
+      if (response.status === 200) {
+        console.log("Folder added successfully!");
+        // Add folder to the local state only if the backend operation is successful
+        addFolder(newFolderName);
+        setNewFolderName(""); // Clear the input after adding the folder
+      } else {
+        console.error("Failed to add folder");
+      }
+    } catch (error) {
+      console.error("Error during folder addition:", error);
+      alert('Something went wrong while adding the folder. Please try again later.');
+    }
+  };
+  
+
+  const handleRenameFolder = (index) => {
+    const oldName = folders[index]
+    const newName = prompt("Enter the new name for the folder:", folders[index]);
+    if (newName && newName.trim() !== "") {
+      const updatedFolders = folders.map((folder, i) => i === index ? newName.trim() : folder);
+      updateFolders(updatedFolders);
     } else {
       alert("Folder name cannot be empty.");
     }
   };
 
-  // Function to handle deleting a folder
   const handleDeleteFolder = (index) => {
     if (window.confirm("Are you sure you want to delete this folder?")) {
-      setFolders((prevFolders) => {
-        const updatedFolders = prevFolders.filter((_, i) => i !== index);
-        sendFoldersToBackend(updatedFolders);
-        return updatedFolders;
-      });
-    }
-  };
-
-  // Function to send folders to the backend
-  const sendFoldersToBackend = async (folders) => {
-    try {
-      console.log(folders);
-      const response = await axios.post(`http://localhost:8080/updateFolders`, folders, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      console.log("Folders sent to backend:", response.data);
-    } catch (error) {
-      console.error("Error sending folders to backend:", error);
+      const updatedFolders = folders.filter((_, i) => i !== index);
+      removeFolder(index); // We only need to update local state, backend handling is separate
     }
   };
 
   return (
     <div className="folder-manager-container">
       <h1 className="folder-manager-title">Folder Manager</h1>
-
-      {/* Input to add a new folder */}
       <div className="folder-input-container">
         <input
           type="text"
@@ -80,28 +76,16 @@ const FolderManager = () => {
           Add Folder
         </button>
       </div>
-
-      {/* List of folders */}
       <ul className="folder-list">
         {folders.map((folder, index) => (
           <li key={index} className="folder-item">
-            <Link to="/folderPage" state={{ folder }} className="folder-link">
-              <span>{folder}</span>
-            </Link>
-            <div className="folder-actions">
-              <button
-                onClick={() => handleRenameFolder(index)}
-                className="rename-folder-button"
-              >
-                Rename
-              </button>
-              <button
-                onClick={() => handleDeleteFolder(index)}
-                className="delete-folder-button"
-              >
-                Delete
-              </button>
-            </div>
+            <span>{folder}</span>
+            <button onClick={() => handleRenameFolder(index)} className="rename-folder-button">
+              Rename
+            </button>
+            <button onClick={() => handleDeleteFolder(index)} className="delete-folder-button">
+              Delete
+            </button>
           </li>
         ))}
       </ul>

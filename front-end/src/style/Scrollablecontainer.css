@@ -9,9 +9,9 @@
     font-family: 'Arial', sans-serif;
     justify-content: flex-start; 
     align-items: flex-start;
-    
   }
-  .no-emails-message {
+
+.no-emails-message {
     display: flex;
     justify-content: center; /* Centers horizontally */
     align-items: center; /* Centers vertically */
