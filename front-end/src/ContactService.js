@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import ContactCard from "./ContactCard";
 import './style/Contacts.css';
 
-function App({API_KEY, emailAddress}) {
+function App({ API_KEY, emailAddress }) {
   const [contacts, setContacts] = useState([]);
   const [newContact, setNewContact] = useState({ name: "", emails: [""] });
   const [editingIndex, setEditingIndex] = useState(null);
+  const [sortMethod, setSortMethod] = useState('a-z'); // State to hold the sort method
+  const [searchString, setSearchString] = useState('');
 
   // Helper function to send data to the backend
   const sendContactToBackend = (method, contact, id = null) => {
@@ -102,37 +104,77 @@ function App({API_KEY, emailAddress}) {
     setNewContact({ ...newContact, emails: updatedEmails });
   };
 
+  function searchByName(data, searchString) {
+    return data.filter(item => 
+      item.name.toLowerCase().includes(searchString.toLowerCase())
+    );
+  }
+
+  function applyOperation(data) {
+    // Check the current sort method and apply sorting accordingly
+    if (sortMethod === 'a-z') {
+      data.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortMethod === 'z-a') {
+      data.sort((a, b) => b.name.localeCompare(a.name));
+    }
+    setContacts(searchByName(data, searchString));
+    return data; // Return the sorted data
+  }
+
+  const fetchContacts = async () => {
+    const url = `http://localhost:8080/contacts/${emailAddress.current}`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${API_KEY.current}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch contacts");
+      }
+      const data = await response.json();
+      applyOperation(data)
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+    }
+  };
 
 
   useEffect(() => {
-    const fetchContacts = async () => {
-      const url = `http://localhost:8080/contacts/${emailAddress.current}`;
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            "Authorization": `Bearer ${API_KEY.current}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch contacts");
-        }
-        const data = await response.json();
-        setContacts(data); // Set the contacts from the response
-        console.log("Fetched contacts:", data);
-      } catch (error) {
-        console.error("Error fetching contacts:", error);
-      }
-    };
-
-    
     fetchContacts();
   }, []);
 
+  const applyChanges = () => {
+    fetchContacts();
+  };
+
   return (
     <div className="ContactServiceContainer">
+    <div className="title-container">
       <h1>Contact Management</h1>
+      {/* Dropdown for sorting */}
+      <select
+        value={sortMethod}
+        onChange={(e) => setSortMethod(e.target.value)}
+        className = "select"
+      >
+        <option value="a-z">A-Z</option>
+        <option value="z-a">Z-A</option>
+      </select>
+      {/* Search bar */}
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={searchString}
+        onChange={(e) => setSearchString(e.target.value)}
+        className = "input"
+      />
+      {/* Apply button */}
+      <button onClick={applyChanges} className="applyButton">Apply</button>
+      </div>
       <div style={{ marginBottom: "20px" }}>
+        {/* Input fields for contact details and buttons */}
         <input
           type="text"
           placeholder="Name"

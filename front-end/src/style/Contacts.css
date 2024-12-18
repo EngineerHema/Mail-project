@@ -18,23 +18,26 @@
     border: 1px solid #ccc;
     padding: 10px;
     border-Radius:5px;
-    background-Color: #f9f9f9;
+    background-Color: #555555;
   }
 
 
   button {
-    color: rgb(0, 0, 0); /* White text */
+    color: rgb(223, 223, 223); /* White text */
+    background-color: #363030;
     border: none; /* Remove border */
+    border: #00ff00 1px solid;
     border-radius: 5px; /* Rounded corners */
     padding: 10px 20px; /* Padding for size */
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 12px; /* Text size */
+    margin-right: 5px;
     transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
-
   }
   
   button:hover {
-    background-color: #363030; /* Slightly darker green on hover */
+    background-color: #00ff00;
+    color: #000000; /* Slightly darker green on hover */
   }
   
 
@@ -49,3 +52,38 @@
   .addContact_btn{
     margin-top: 5px;
   }
+
+  .title-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    flex-direction: row;     /* Align items in a row */
+    text-align: center;      /* Center text inside each element */
+  }
+  
+  .title-container > * {
+    flex: 1; /* Makes each child element take an equal portion of the container's width */
+  }
+  
+  .title-container > :first-child {
+    flex: 2; /* Makes the first child element take a larger portion of the width */
+  }
+  .select {
+    margin-right: 2%;
+    margin-left: 2%;
+    height:50px;
+    width: 20%;
+  }
+
+  .input {
+    width: 10%;
+    height:50px;
+    margin-right: 2%;
+  }
+
+  .applyButton{
+    width: 10%;
+    height:50px;
+    margin-right: 2%
+  }
+
