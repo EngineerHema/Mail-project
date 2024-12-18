@@ -44,6 +44,13 @@ function SideBar() {
         >
           Folders
         </NavLink>
+
+        <NavLink
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          to="/Draft"
+        >
+          Draft
+        </NavLink>
       </Nav>
     </div>
   );

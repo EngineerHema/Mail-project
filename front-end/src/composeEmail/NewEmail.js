@@ -1,12 +1,13 @@
 export class Email {
-  constructor(id, fromAddress, toAddress, subject, body, attachments, priority) {
-    this.id = id
+  constructor(id, fromAddress, toAddress, subject, body, attachments, priority, isDraft) {
+    this.id = id;
     this.fromAddress = fromAddress;
-    this.toAddress = toAddress; // Array of strings
+    this.toAddress = toAddress;
     this.subject = subject;
     this.body = body;
     this.attachments = attachments;
-    this.priority = priority; // Priority level (e.g., 'high', 'medium', 'low')
+    this.priority = priority;
+    this.isDraft = isDraft; 
   }
 }
 
@@ -17,7 +18,8 @@ export class EmailBuilder {
     this.subject = '';
     this.body = '';
     this.attachments = [];
-    this.priority = 'medium'; // Default priority
+    this.priority = 'medium';
+    this.isDraft = false;  
   }
 
   setFromAddress(fromAddress) {
@@ -27,7 +29,7 @@ export class EmailBuilder {
 
   addToAddress(address) {
     if (address && !this.toAddress.includes(address)) {
-      this.toAddress.push(address); // Add unique address
+      this.toAddress.push(address);
     }
     return this;
   }
@@ -52,6 +54,11 @@ export class EmailBuilder {
     return this;
   }
 
+  setIsDraft(isDraft) {
+    this.isDraft = isDraft;
+    return this;
+  }
+
   build() {
     return new Email(
       this.id,
@@ -60,7 +67,8 @@ export class EmailBuilder {
       this.subject,
       this.body,
       this.attachments,
-      this.priority // Include priority in the built email
+      this.priority,
+      this.isDraft  
     );
   }
 }

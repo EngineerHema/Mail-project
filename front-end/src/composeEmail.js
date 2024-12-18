@@ -10,7 +10,7 @@ function ComposeEmail({ API_KEY, emailAddress, name}) {
         <NavBar name={name}></NavBar>
         <div className="container_composeEmail">
         <SideBar/>
-        <EmailForm API_KEY={API_KEY} emailAddress={emailAddress} ></EmailForm>
+        <EmailForm API_KEY={API_KEY} emailAddress={emailAddress}></EmailForm>
         </div>
         
      </div>
