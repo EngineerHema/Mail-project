@@ -29,7 +29,24 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("id", checkedEmails);
       url.searchParams.append("type", type);
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${API_KEY.current}` },
+      });
 
+      if (response.ok) alert("Email deleted successfully");
+      else console.error("Failed to delete email");
+    } catch (error) {
+      console.error("Error deleting email:", error);
+    }
+  };
+
+  const handleRestore = async (e) => {
+    e.preventDefault();
+    try {
+      const url = new URL(`http://localhost:8080/restoreEmail`);
+      url.searchParams.append("Address", Address.current);
+      url.searchParams.append("id", checkedEmails);
       const response = await fetch(url, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${API_KEY.current}` },
@@ -137,6 +154,10 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       {type === "inbox" && 
       <><FoldersDropdown folders={folders} onFolderSelect={handleFolderSelect} />
       <button className="move-button" onClick={handleAddtoFolder}>Move</button></>
+          }
+
+      {type === "trash" && 
+      <><button className="move-button" onClick={handleRestore}>Restore</button></>
           }
     </div>
     </div>
