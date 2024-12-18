@@ -1,0 +1,62 @@
+.search-box {
+    margin-top: 0; /* Adjust as needed for your layout */
+    border: solid 2px #00ff00; /* Even thinner border for a sleeker look */
+    height: 35px; /* Further reduced height for smaller appearance */
+    display: inline-block;
+    position: relative;
+    border-radius: 20px; /* Reduced for a more subtle curvature */
+}
+
+.search-box input[type="text"] {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px; /* Reduced font size for smaller form factor */
+    font-weight: bold;
+    width: 50px; /* Keep initial width small */
+    height: 30px; /* Reduced to match the max-height of the container */
+    padding: 0 30px 0 20px; /* Adjust padding to center text vertically */
+    border: none;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background: #3d3d3d; /* Ensures input background matches */
+    transition: width 300ms ease; /* Faster transition */
+	transform: translateY(-4px); 
+    &:focus, &:not(:placeholder-shown) {
+        width: 220px; /* Less expansion for a smaller design */
+        transition: width 300ms ease;
+    }
+
+    &:focus {
+        outline: none; /* Remove default focus outline */
+    }
+}
+
+.search-box span {
+    width: 15px; /* Reduce icon size */
+    height: 15px; /* Reduce icon size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 12px; /* Adjusted to better fit within the new size */
+    right: 5px; /* Closer to the edge */
+    transition: all 300ms ease; /* Smooth transition for movements */
+    &:before, &:after {
+        content: '';
+        height: 15px; /* Shorter to match the new icon size */
+        border-left: solid 2px #00ff00; /* Thinner line for a finer icon */
+        position: absolute;
+        transform: rotate(-45deg);
+    }
+
+    &:after {
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: all 300ms ease; /* Ensure transitions are smooth */
+    }
+}
+
+/* Enhance the hover and focus visual feedback */
+.search-box input[type="text"]:hover,
+.search-box input[type="text"]:focus {
+    background-color: #3d3d3d; /* Subtle change to indicate active state */
+}

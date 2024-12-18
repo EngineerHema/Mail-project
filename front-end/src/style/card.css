@@ -1,0 +1,184 @@
+/* Container for the entire card */
+.email-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  /* Main card styling */
+  .email-card {
+    background-color: #1c1c1c; /* Dark background for modern look */
+    border: 1px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    width: 100%;
+    color: #ffffff;
+    transition: transform 0.3s ease;
+    position: relative; /* Added for absolute positioning of attachments */
+  }
+  
+  .email-card:hover {
+    transform: translateY(-5px); /* Subtle lift effect */
+    border: #00ff00 1px solid;
+  }
+  
+  /* Header of the card */
+  .email-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  /* Priority indicator (circle) */
+  .priority-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  /* Link styling */
+  .email-card-link {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 500;
+  }
+  
+  .email-card-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Time styling */
+  .time {
+    font-size: 12px;
+    color: #bbbbbb;
+    margin-left: auto;
+    margin-right:1%;
+  }
+  
+  /* Email body */
+  .email-card-body {
+    margin-top: 10px;
+    display: flex;
+    
+  }
+  
+  .email-title {
+    font-size: 18px;
+    margin: 5px 0;
+    color: #00ff00; /* Neon green for title */
+  }
+  
+  .email-body {
+    font-size: 14px;
+    color: #dddddd; /* Light gray for text */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* Delete button styling */
+  .delete-button {
+    background-color: #ff4d4d;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .delete-button:hover {
+    background-color: #cc0000;
+  }
+  
+  /* Sent and From text */
+  .for {
+    color: #00bbff; /* Light blue for from */
+  }
+  
+  .from {
+    color: #00bbff; /* Light blue for from */
+  }
+  
+
+/* Attachments Section */
+
+
+.card-attachment {
+  position: absolute; /* Absolute positioning within .email-card */
+  bottom: 10px; /* Distance from the bottom of the card */
+  right: 15px; /* Distance from the right edge of the card */
+  font-size: 12px; /* Smaller font size */
+  color: #cccccc; /* Light gray color */
+  background-color: #2c2c2c; /* Slightly lighter background for contrast */
+  padding: 5px 8px; /* Padding around the text */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); /* Soft shadow for emphasis */
+}
+/* Custom Checkbox Container */
+.custom-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 18px; /* Size of the checkbox */
+  height: 18px;
+  margin-left: 3px; /* Spacing to the left */
+  margin-right: 10px; /* Spacing to the right */
+  cursor: pointer; /* Pointer cursor for interaction */
+}
+
+/* Hide the default checkbox */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0; /* Make the default checkbox invisible */
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Custom Checkbox Design */
+.custom-checkbox .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #333; /* Dark background for the checkbox */
+  border: 2px solid #555; /* Border color */
+  border-radius: 4px; /* Slightly rounded corners for a modern look */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* On hover - make the border glow */
+.custom-checkbox:hover .checkmark {
+  border-color: #00ff00; /* Neon green border on hover */
+}
+
+/* Custom Checkbox Checked State */
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #00ff00; /* Neon green fill when checked */
+  border-color: #00ff00; /* Border matches background */
+}
+
+/* Add a checkmark symbol */
+.custom-checkbox .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none; /* Initially hidden */
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #000; /* Black checkmark */
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg); /* Draw the checkmark */
+}
+
+/* Show the checkmark when checked */
+.custom-checkbox input:checked ~ .checkmark::after {
+  display: block;
+}

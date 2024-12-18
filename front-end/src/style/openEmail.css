@@ -1,0 +1,14 @@
+.container_open_email {
+    display: flex;
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    align-items: stretch; 
+  }
+
+  .EmailPage {
+    
+    flex-grow: 1;
+    background-color: #fff;
+    overflow-y: auto;
+  }
+  
