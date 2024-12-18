@@ -1,18 +1,24 @@
 import Navbar from 'react-bootstrap/Navbar';
 import "../style/NavBar.css";
+import { useNavigate } from 'react-router-dom';
+
 
 
 function NavBar({name}) {
   console.log(name+" name")
+  const navigate = useNavigate();
+
+
 
 
 
   // Refresh button action
   const handleRefresh = () => {
-    window.location.reload();
+   
   };
 
   const handleSignOut = () => {
+    navigate('/');
     console.log('signed Out successfully');
   };
 

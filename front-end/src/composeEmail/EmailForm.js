@@ -1,21 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { EmailBuilder } from './NewEmail';
 import "../style/EmailForm.css";
 
-
-const EmailForm = ({API_KEY, emailAddress}) => {
-
-
+const EmailForm = ({ API_KEY, emailAddress , header, body, color, receiver, attachments ,singleAddressDraft,toAddressDraft }) => {
+  const [priorityChange, setPriorityChange] = useState(false);
+  const [isDraft, setIsDraft] = useState(false); 
+  const checkIsDraft = useRef(false)
   const [formData, setFormData] = useState({
     fromAddress: '',
-    subject: '',
-    receiverEmail: '',
-    toAddress: [],
-    body: '',
-    attachments: [],
+    subject: header ?? "", 
+    receiverEmail: singleAddressDraft ?? "", 
+    toAddress: toAddressDraft ?? [], 
+    body: body ?? "", 
+    attachments: attachments ?? [], 
     priority: 'medium',
   });
+
+  const formDataRef = useRef(formData);
+  console.log("check hema"+formData)
+  useEffect(() => {
+    formDataRef.current = formData;
+  }, [formData]);
+
+  const isFormNotEmpty = () => {
+    const { subject, receiverEmail, toAddress, body, attachments } = formDataRef.current;
+    return (
+      subject.length > 0 ||
+      receiverEmail.length > 0 ||
+      toAddress.length > 0 ||
+      body.length > 0 ||
+      attachments.length > 0 ||
+      priorityChange
+    );
+  };
+  const isFormEmpty = () => {
+    return (
+      header.length > 0 ||
+      body.length > 0 ||
+      singleAddressDraft.length > 0 ||
+      toAddressDraft.length > 0 ||
+      attachments.length > 0
+    );
+  };
+
+  // Handling form submission when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (isFormNotEmpty()&&checkIsDraft.current) {
+        handleSubmit(true); // Call handleSubmit with isDraft true when the form is not empty
+      }
+      else{
+        checkIsDraft.current=true
+      }
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +65,7 @@ const EmailForm = ({API_KEY, emailAddress}) => {
   };
 
   const handlePriorityChange = (e) => {
+    setPriorityChange(true);
     setFormData((prevData) => ({
       ...prevData,
       priority: e.target.value,
@@ -48,14 +88,12 @@ const EmailForm = ({API_KEY, emailAddress}) => {
       const reader = new FileReader();
       reader.onload = (event) => {
         const fileContent = event.target.result;
-
         const fileObject = {
           name: file.name,
           type: file.type,
           size: `${file.size}`,
           content: fileContent,
         };
-
         setFormData((prevData) => ({
           ...prevData,
           attachments: [...prevData.attachments, fileObject],
@@ -74,16 +112,10 @@ const EmailForm = ({API_KEY, emailAddress}) => {
 
   const sendEmailToBackend = async (emailData) => {
     try {
-
-      console.log("key"+API_KEY.current)
-
-      console.log(emailData);
       const response = await axios.post('http://localhost:8080/sendEmail', emailData, {
         headers: {
           'Content-Type': 'application/json',
-
-          Authorization:`Bearer ${API_KEY.current}`
-
+          Authorization: `Bearer ${API_KEY.current}`,
         },
       });
 
@@ -98,26 +130,23 @@ const EmailForm = ({API_KEY, emailAddress}) => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const handleSubmit = (isDraftSubmit = false) => {
+    setIsDraft(isDraftSubmit); // Set draft status before sending
+    const { subject, receiverEmail, toAddress, body, attachments,priority } = formDataRef.current;
     const emailBuilder = new EmailBuilder();
     const email = emailBuilder
-
       .setFromAddress(emailAddress.current)
+      .setSubject(subject)
+      .setBody(body)
+      .setSingleAddressDraft(receiverEmail);
 
-      .setSubject(formData.subject)
-      .setBody(formData.body);
-
-    formData.toAddress.forEach((address) => emailBuilder.addToAddress(address));
-
-    formData.attachments.forEach((attachment) =>
-      emailBuilder.addAttachment(attachment)
-    );
-
-    emailBuilder.setPriority(formData.priority);
+    toAddress.forEach((address) => emailBuilder.addToAddress(address));
+    attachments.forEach((attachment) => emailBuilder.addAttachment(attachment));
+    emailBuilder.setPriority(priority);
+    emailBuilder.setIsDraft(isDraftSubmit); // Pass isDraft to EmailBuilder
 
     const emailObject = emailBuilder.build();
+    console.log(emailObject)
     sendEmailToBackend(emailObject);
 
     setFormData({
@@ -132,7 +161,7 @@ const EmailForm = ({API_KEY, emailAddress}) => {
   };
 
   return (
-    <form className="email-form" onSubmit={handleSubmit}>
+    <form className="email-form" onSubmit={(e) => { e.preventDefault(); handleSubmit(false); }}>
       <h2>Send Email</h2>
       <div className="form-group">
         <label htmlFor="receiverEmail">Receiver's Email</label>
@@ -227,6 +256,4 @@ const EmailForm = ({API_KEY, emailAddress}) => {
   );
 };
 
-
 export default EmailForm;
-

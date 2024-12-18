@@ -11,7 +11,9 @@ import Sent from './sent';
 import OpenEmail from './openEmail';
 import Folders from './Folders';
 import FolderPage from './folderPage';
+import Draft from './Draft';
 import ScrollableContainer from './emails/ScrollableContainer';
+
 
 
 
@@ -45,8 +47,13 @@ function App() {
         <Route path="/myContacts" element={<Contacts API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
 
         <Route path="/Folders" element={<Folders API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+
         <Route path="/folderPage" element={<FolderPage API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+
+        <Route path="/Draft" element={<Draft API_KEY = {API_KEY} emailAddress={emailAddress} name={name}/>} />
+
         <Route path="/toScrollable" element={<ScrollableContainer API_KEY={API_KEY} Address={emailAddress} type={"inbox"}/>} />
+
 
       </Routes>
     </Router>

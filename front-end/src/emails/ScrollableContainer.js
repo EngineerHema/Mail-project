@@ -41,6 +41,24 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
     }
   };
 
+
+          return {
+            id: email.id,
+            fromAddress: email.fromAddress,
+            toAddress : email.toAddress,
+            subject: email.subject || "No Subject",
+            body: email.body || "No Content",
+            color: borderColor,
+            type : type,
+            time : email.timeStamp,
+            attachments : email.attachments,
+            singleAddressDraft : email.singleAddressDraft,
+            toAddressDraft : email.toAddressDraft,
+
+
+          };
+        });
+
   const handleRestore = async (e) => {
     e.preventDefault();
     try {
@@ -51,6 +69,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
         method: "PUT",
         headers: { Authorization: `Bearer ${API_KEY.current}` },
       });
+
 
       if (response.ok) alert("Email restored successfully");
       else console.error("Failed to restored email");
@@ -82,7 +101,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
     }
   };
 
-  // Fetch emails on component mount
+  
   useEffect(() => {
     fetchEmails(API_KEY, Address, type, setItems, substring, sortMethod, filterMethod);
     
@@ -182,7 +201,11 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
               time={item.time}
               attachments={item.attachments}
               API_KEY={API_KEY}
-              onCheckboxToggle={handleCheckboxToggle}
+              singleAddressDraft= {item.singleAddressDraft}
+              toAddressDraft = {item.toAddressDraft}
+              onCheckboxToggle={handleCheckboxToggle} // Pass the handler to Email component
+
+
             />
           ))
         )}
