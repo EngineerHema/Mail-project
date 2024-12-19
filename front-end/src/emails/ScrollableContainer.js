@@ -48,14 +48,14 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("id", checkedEmails);
       const response = await fetch(url, {
-        method: "DELETE",
+        method: "PUT",
         headers: { Authorization: `Bearer ${API_KEY.current}` },
       });
 
-      if (response.ok) alert("Email deleted successfully");
-      else console.error("Failed to delete email");
+      if (response.ok) alert("Email restored successfully");
+      else console.error("Failed to restored email");
     } catch (error) {
-      console.error("Error deleting email:", error);
+      console.error("Error restored email:", error);
     }
   };
 
