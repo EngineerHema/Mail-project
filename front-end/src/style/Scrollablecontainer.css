@@ -100,15 +100,21 @@ width:70%;
 .move-button {
   margin-left: 2%;
   height: 35px;
-  background:  #005c00; /* Green gradient */
   color: rgb(212, 212, 212);
-  border: white;
+  border: 1px solid #00ff00; /* Ensure border syntax is correct */
   border-radius: 25px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* More subtle shadow */
-  transition: box-shadow 0.2s ease-in-out, transform 0.1s ease; /* Smoother transitions */}
+  transition: box-shadow 0.2s ease-in-out, transform 0.1s ease; /* Smoother transitions */
+  display: inline-flex; /* Use flexbox to center content */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  padding: 0 15px; /* Adjust padding as needed */
+  text-align: center; /* Ensure text is centered */
+}
+
   
   .move-button:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Slightly larger shadow for a soft lift effect */

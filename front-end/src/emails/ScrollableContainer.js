@@ -33,8 +33,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
         method: "DELETE",
         headers: { Authorization: `Bearer ${API_KEY.current}` },
       });
-
-      if (response.ok) alert("Email deleted successfully");
+      if (response.ok) console.log("email deleted")
       else console.error("Failed to delete email");
     } catch (error) {
       console.error("Error deleting email:", error);
