@@ -209,13 +209,13 @@ public class EmailService {
 
 
             if (address.equals(retrievedEmail.getFromAddress())) {
-                retrievedEmail.setType("inbox");
-                emailOwner.setInboxObserver(true);
+                retrievedEmail.setType("sent");
+                emailOwner.setSentObserver(true);
             }
 
             else if (address.equals(retrievedEmail.getToAddress())) {
-                retrievedEmail.setType("sent");
-                emailOwner.setSentObserver(true);
+                retrievedEmail.setType("inbox");
+                emailOwner.setInboxObserver(true);
             }
 
             jpaEmails.save(retrievedEmail);
