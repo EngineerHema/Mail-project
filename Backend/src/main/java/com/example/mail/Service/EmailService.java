@@ -124,7 +124,8 @@ public class EmailService {
 
                 case "trash":
                     if (user.get().isDeleteObserver()){
-                        emailCache.put(Address+type, user.get().getEmails());
+                        List<Email> tempEmails = user.get().getEmails();
+                        emailCache.put(Address+type, tempEmails);
                         user.get().setDeleteObserver(false);
                     }
                     break;

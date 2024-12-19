@@ -28,7 +28,7 @@ public class UserActivity {
     @Autowired
     private UserService userService;
 
-    private final List<String> validTypes = Arrays.asList("inbox", "trash", "sent", "defaultType","draft");
+    private final List<String> validTypes = Arrays.asList("inbox", "trash", "sent", "defaultType");
 
     @PostMapping("/sendEmail")
     public ResponseEntity<String> sendEmail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
@@ -83,6 +83,7 @@ public class UserActivity {
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User validation failed.");
             }
+
         }
         else {
             if (toAddresses == null || toAddresses.isEmpty()) {
