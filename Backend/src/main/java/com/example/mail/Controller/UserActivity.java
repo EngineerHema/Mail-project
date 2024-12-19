@@ -28,7 +28,7 @@ public class UserActivity {
     @Autowired
     private UserService userService;
 
-    private final List<String> validTypes = Arrays.asList("inbox", "trash", "sent", "defaultType");
+    private final List<String> validTypes = Arrays.asList("inbox", "trash", "sent", "defaultType","draft");
 
     @PostMapping("/sendEmail")
     public ResponseEntity<String> sendEmail(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> requestBody) throws ExecutionException, InterruptedException {
@@ -53,6 +53,8 @@ public class UserActivity {
         email.setBody(requestBody.get("body").toString());
         email.setPriority(requestBody.get("priority").toString());
         email.setSubject(requestBody.get("subject").toString());
+        email.setSingleAddressDraft(requestBody.get("singleAddressDraft").toString());
+        boolean isDraft = requestBody.get("isDraft").toString().equals("true");
 
         // Set the attachments after processing them
         List<Map<String, Object>> attachmentData = (List<Map<String, Object>>) requestBody.get("attachments");
@@ -72,23 +74,35 @@ public class UserActivity {
 
         // Ensure "toAddress" exists and is a list
         List<String> toAddresses = (List<String>) requestBody.get("toAddress");
-        if (toAddresses == null || toAddresses.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing recipient address.");
-        }
-
-        // Send the email to all recipients
+        email.setToAddressDraft(toAddresses);
         boolean sent = false;
-        for (String toAddress : toAddresses) {
-            email.setToAddress(toAddress);
-            sent = emailService.sendEmail(email);
+        if(isDraft){
+            sent = emailService.sendEmail(email,isDraft);
+            if (sent) {
+                return ResponseEntity.ok("Email sent successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User validation failed.");
+            }
+        }
+        else {
+            if (toAddresses == null || toAddresses.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing recipient address.");
+            }
+            // Send the email to all recipients
+
+            for (String toAddress : toAddresses) {
+                email.setToAddress(toAddress);
+                sent = emailService.sendEmail(email,isDraft);
+            }
+
+            // Return response based on whether the email was sent successfully
+            if (sent) {
+                return ResponseEntity.ok("Email sent successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User validation failed.");
+            }
         }
 
-        // Return response based on whether the email was sent successfully
-        if (sent) {
-            return ResponseEntity.ok("Email sent successfully!");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User validation failed.");
-        }
     }
 
 

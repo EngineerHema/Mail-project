@@ -41,11 +41,18 @@ public class EmailService {
 
     }
 
-    public boolean sendEmail(Email email) {
+    public boolean sendEmail(Email email,boolean isDraft) {
         Optional<User> receiver = jpaUsers.findByEmailAddress(email.getToAddress());
         Optional<User> sender = jpaUsers.findByEmailAddress(email.getFromAddress());
 
-
+        if (isDraft){
+            email.setTimeStamp(LocalDateTime.now());
+            email.setType("draft");
+            sender.get().addEmail(email);
+            sender.get().setSentObserver(true);
+            jpaUsers.save(sender.get());
+            return true;
+        }
         if (sender.isPresent() && receiver.isPresent()) {
             email.setTimeStamp(LocalDateTime.now());
             email.setType("sent");
@@ -57,8 +64,6 @@ public class EmailService {
             receiver.get().addEmail(email);
             receiver.get().setInboxObserver(true);
             jpaUsers.save(receiver.get());
-
-
             return true;
         } else {
             return false;
@@ -82,10 +87,9 @@ public class EmailService {
                     email.get().setType("trash");
                     emailOwner.setSentObserver(true);
                     jpaEmails.save(email.get());
-                }else {
-                    emailOwner.setDeleteObserver(true);
-                    email.get().setType("trash");
-                    jpaEmails.save(email.get());
+                }
+                else {
+                    jpaEmails.delete(email.get());
                 }
             }
             jpaUsers.save(emailOwner);

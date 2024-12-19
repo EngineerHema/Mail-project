@@ -28,6 +28,7 @@ function Email({
   };
 
   let head = type === "sent" ? `For: ${receiver}` : `From: ${sender}`;
+ 
 
   const CoolDate = ({ time }) => {
     const formatCustomDateFromString = (time) => {
@@ -56,6 +57,24 @@ function Email({
     return <span className="time">{formatCustomDateFromString(time)}</span>;
   };
 
+  const handleDelete = async (e) => {
+    if(type!=="draft")return
+    e.preventDefault();
+    try {
+      const url = new URL(`http://localhost:8080/deleteEmail`);
+      url.searchParams.append("Address", Address.current);
+      url.searchParams.append("id", [id]);
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${API_KEY.current}` },
+      });
+
+      if (response.ok) alert("Email deleted successfully");
+      else console.error("Failed to delete email");
+    } catch (error) {
+      console.error("Error deleting email:", error);
+    }
+  };
 
 
 
@@ -80,6 +99,8 @@ function Email({
               toAddressDraft,
             }}
             className="email-card-link"
+            onClick={handleDelete}
+            
           >
             <span className={type === "sent" ? "for" : "from"}>{head}</span>
           </Link>

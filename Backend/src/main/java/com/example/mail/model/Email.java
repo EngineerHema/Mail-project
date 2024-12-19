@@ -45,6 +45,14 @@ public class Email {
     @Column(name = "folders_names")
     private List<String> foldersNames;
 
+    @Column(name = "single_address_draft")
+    private String singleAddressDraft;
+
+    @ElementCollection
+    @CollectionTable(name = "email_to_address_draft", joinColumns = @JoinColumn(name = "email_id"))
+    @Column(name = "to_address_draft")
+    private List<String> toAddressDraft = new ArrayList<>();
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @JsonBackReference
@@ -156,4 +164,21 @@ public class Email {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getSingleAddressDraft() {
+        return singleAddressDraft;
+    }
+
+    public void setSingleAddressDraft(String singleAddressDraft) {
+        this.singleAddressDraft = singleAddressDraft;
+    }
+
+    public List<String> getToAddressDraft() {
+        return toAddressDraft;
+    }
+
+    public void setToAddressDraft(List<String> toAddressDraft) {
+        this.toAddressDraft = toAddressDraft;
+    }
 }
+
