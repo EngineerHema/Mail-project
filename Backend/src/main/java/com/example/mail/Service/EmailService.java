@@ -130,6 +130,7 @@ public class EmailService {
                     break;
 
                 default:
+                    emailCache.put(Address+type, user.get().getEmails());
                     break;
 
             }
