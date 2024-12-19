@@ -18,6 +18,7 @@ import com.example.mail.Service.Sort.SortStratagyImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -81,10 +82,12 @@ public class EmailService {
                 }
                 else if (email.get().getType().equals("inbox")){
                     email.get().setType("trash");
+                    email.get().setTimeStamp(LocalDateTime.now());
                     emailOwner.setInboxObserver(true);
                     jpaEmails.save(email.get());
                 }else if (email.get().getType().equals("sent")){
                     email.get().setType("trash");
+                    email.get().setTimeStamp(LocalDateTime.now());
                     emailOwner.setSentObserver(true);
                     jpaEmails.save(email.get());
                 }
@@ -123,12 +126,26 @@ public class EmailService {
                     break;
 
                 case "trash":
-                    if (user.get().isDeleteObserver()){
-                        List<Email> tempEmails = user.get().getEmails();
-                        emailCache.put(Address+type, tempEmails);
-                        user.get().setDeleteObserver(false);
+                    List<Email> tempEmails = user.get().getEmails();
+                    LocalDateTime now = LocalDateTime.now();
+
+                    List<Email> emailsToRemove = new ArrayList<>();
+                    for (Email email : tempEmails) {
+                        if (email.getType().equals("trash") &&
+                                Duration.between(email.getTimeStamp(), now).toDays() > 29) {
+                            emailsToRemove.add(email);
+                        }
                     }
+
+                    tempEmails.removeAll(emailsToRemove);
+                    jpaEmails.deleteAll(emailsToRemove);  // Ensure jpaEmails is your database handler
+
+                    emailCache.put(Address + type, tempEmails);
+                    user.get().setDeleteObserver(true);
                     break;
+
+
+
 
                 default:
                     emailCache.put(Address+type, user.get().getEmails());
