@@ -59,11 +59,11 @@ function Email({
 
   const handleDelete = async (e) => {
     if(type!=="draft")return
-    e.preventDefault();
     try {
       const url = new URL(`http://localhost:8080/deleteEmail`);
       url.searchParams.append("Address", Address.current);
       url.searchParams.append("id", [id]);
+      url.searchParams.append("type", "trash");
       const response = await fetch(url, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${API_KEY.current}` },
