@@ -36,6 +36,8 @@ const fetchEmails = async (API_KEY, Address, type, setItems, substring, sortMeth
                 type: type,
                 time: email.timeStamp,
                 attachments: email.attachments,
+                singleAddressDraft : email.singleAddressDraft,
+                toAddressDraft : email.toAddressDraft,
             }));
 
             setItems(formattedEmails);

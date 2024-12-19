@@ -42,22 +42,7 @@ const ScrollableContainer = ({ API_KEY, Address, type}) => {
   };
 
 
-          return {
-            id: email.id,
-            fromAddress: email.fromAddress,
-            toAddress : email.toAddress,
-            subject: email.subject || "No Subject",
-            body: email.body || "No Content",
-            color: borderColor,
-            type : type,
-            time : email.timeStamp,
-            attachments : email.attachments,
-            singleAddressDraft : email.singleAddressDraft,
-            toAddressDraft : email.toAddressDraft,
-
-
-          };
-        });
+       
 
   const handleRestore = async (e) => {
     e.preventDefault();
